@@ -2,12 +2,8 @@
   "name": "testcafe-browser-provider-saucelabs-official",
   "version": "1.0.0",
   "description": "saucelabs-official TestCafe browser provider plugin.",
-  "repository": "https://github.com/mhan83/testcafe-browser-provider-saucelabs-official",
-  "homepage": "https://github.com/saucelabs/testcafe-provider",
-  "author": {
-    "name": "Mike Han",
-    "email": "mike.han@saucelabs.com"
-  },
+  "repository": "https://github.com/saucelabs/testcafe-provider",
+  "author": "devx <devx@saucelabs.com>",
   "main": "lib/index",
   "files": [
     "lib"
