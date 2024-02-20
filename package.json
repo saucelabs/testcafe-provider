@@ -11,7 +11,8 @@
   "scripts": {
     "test": "gulp test",
     "publish-please": "publish-please",
-    "prepublish": "publish-please guard"
+    "prepublish": "publish-please guard",
+    "lint": "eslint"
   },
   "keywords": [
     "testcafe",
@@ -31,12 +32,14 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-preset-stage-3": "^6.11.0",
     "del": "^2.0.0",
+    "eslint": "8.56.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^3.0.1",
     "gulp-mocha": "^3.0.1",
     "node-version": "^1.0.0",
     "publish-please": "^5.5.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "typescript-eslint": "7.0.2"
   }
 }
