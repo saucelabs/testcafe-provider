@@ -12,6 +12,7 @@
     "test": "gulp test",
     "publish-please": "publish-please",
     "prepublish": "publish-please guard",
+    "build": "tsc",
     "lint": "eslint"
   },
   "keywords": [
