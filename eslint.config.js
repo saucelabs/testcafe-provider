@@ -5,5 +5,5 @@ const eslintConfigPrettier = require('eslint-config-prettier');
 module.exports = typescriptEslint.config(
   eslint.configs.recommended,
   ...typescriptEslint.configs.recommended,
-  ...eslintConfigPrettier,
+  eslintConfigPrettier,
 );
