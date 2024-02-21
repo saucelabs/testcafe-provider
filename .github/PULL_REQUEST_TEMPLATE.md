@@ -1,31 +1,30 @@
-# One-line summary
+## Proposed changes
+<!--
+Describe the big picture of your changes here to communicate to the maintainers why we should accept this pull request. If it fixes a bug or resolves a feature request, be sure to link to that issue.
+-->
 
-> Issue : #1234 (only if appropriate)
+## Types of changes
+<!--
+What types of changes does your code introduce to saucectl?
+_Put an `x` in the boxes that apply_
+-->
 
-## Description
-A few sentences describing the overall goals of the pull request's
-commits.
+- [ ] Bugfix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation Update (if none of the other choices apply)
 
-## Types of Changes
-_What types of changes does your code introduce? Keep the ones that apply:_
+## Checklist
+<!--
+Put an `x` in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code._
+-->
 
-- New feature (non-breaking change which adds functionality)
-- Bug fix (non-breaking change which fixes an issue)
-- Configuration change
-- Refactor/improvements
-- Documentation / non-code
+- [ ] Lint and unit tests pass locally with my changes
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] I have added necessary documentation (if appropriate)
+- [ ] I have updated the json schema (if appropriate)
 
-## Tasks
-_List of tasks you will do to complete the PR_
-  - [ ] Created Task 1
-  - [ ] Created Task 2
-  - [ ] To-do Task 3
-
-## Review
-_List of tasks the reviewer must do to review the PR_
-- [ ] Tests
-- [ ] Documentation
-- [ ] CHANGELOG
-
-## Deployment Notes
-These should highlight any db migrations, feature toggles, etc.
+## Further comments
+<!--
+If this is a relatively large or complex change, kick off the discussion by explaining why you chose the solution you did and what alternatives you considered, etc...
+-->
