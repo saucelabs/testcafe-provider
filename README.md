@@ -1,5 +1,4 @@
 # testcafe-browser-provider-saucelabs-official
-[![Build Status](https://travis-ci.org/mhan83/testcafe-browser-provider-saucelabs-official.svg)](https://travis-ci.org/mhan83/testcafe-browser-provider-saucelabs-official)
 
 This is the **saucelabs-official** browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
