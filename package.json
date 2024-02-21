@@ -34,6 +34,6 @@
     "saucelabs-connector": "2.0.0"
   },
   "peerDependencies": {
-    "testcafe": "^2.6.2"
+    "testcafe": "^2.0.0"
   }
 }
