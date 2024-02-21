@@ -1,15 +1,14 @@
 export default {
-  // Multiple browsers support
   isMultiBrowser: true,
 
   // Required - must be implemented
   // Browser control
   async openBrowser(/* id, pageUrl, browserName */) {
-    throw new Error("Not implemented!");
+    throw new Error('Not implemented!');
   },
 
   async closeBrowser(/* id */) {
-    throw new Error("Not implemented!");
+    throw new Error('Not implemented!');
   },
 
   // Optional - implement methods you need, remove other methods
@@ -24,7 +23,7 @@ export default {
 
   // Browser names handling
   async getBrowserList() {
-    throw new Error("Not implemented!");
+    throw new Error('Not implemented!');
   },
 
   async isValidBrowserName(/* browserName */) {

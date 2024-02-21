@@ -9,7 +9,6 @@
     "lib"
   ],
   "scripts": {
-    "test": "gulp test",
     "build": "tsc",
     "lint": "eslint"
   },
