@@ -1,6 +1,6 @@
 # testcafe-browser-provider-saucelabs-official
 
-This is the **saucelabs-official** browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
+This is the official Sauce Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
 ## Install
 
@@ -31,4 +31,12 @@ testCafe
     .src('path/to/test/file.js')
     .browsers('saucelabs-official:browser1')
     .run();
+```
+
+## Development
+
+To use the local version of the plugin, you can link the package:
+
+```
+npm run link
 ```

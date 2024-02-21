@@ -11,7 +11,8 @@
   "scripts": {
     "build": "rimraf ./lib && tsc",
     "lint": "prettier ./src --check && eslint",
-    "fmt": "prettier ./src --write"
+    "fmt": "prettier ./src --write",
+    "link": "npm link && npm link testcafe-browser-provider-saucelabs-official"
   },
   "keywords": [
     "testcafe",
