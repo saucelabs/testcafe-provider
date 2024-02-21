@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "rimraf ./lib && tsc",
-    "lint": "prettier ./src --check && eslint ./src",
+    "lint": "prettier ./src ./test --check && eslint ./src ./test",
     "fmt": "prettier ./src --write",
     "link": "npm link && npm link testcafe-browser-provider-saucelabs-official"
   },
