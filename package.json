@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "eslint"
+    "lint": "prettier ./src --check && eslint"
   },
   "keywords": [
     "testcafe",
