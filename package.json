@@ -1,7 +1,7 @@
 {
-  "name": "testcafe-browser-provider-saucelabs-official",
+  "name": "testcafe-browser-provider-sauce",
   "version": "0.0.1",
-  "description": "saucelabs-official TestCafe browser provider plugin.",
+  "description": "Official Sauce Labs TestCafe browser provider plugin.",
   "repository": "https://github.com/saucelabs/testcafe-provider",
   "author": "devx <devx@saucelabs.com>",
   "main": "lib/index",
@@ -12,7 +12,7 @@
     "build": "rimraf ./lib && tsc",
     "lint": "prettier ./src ./test --check && eslint ./src ./test",
     "fmt": "prettier ./src --write",
-    "link": "npm link && npm link testcafe-browser-provider-saucelabs-official",
+    "link": "npm link && npm link testcafe-browser-provider-sauce",
     "prepare": "husky"
   },
   "keywords": [
