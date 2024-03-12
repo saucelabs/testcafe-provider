@@ -6,15 +6,21 @@ module.exports = ts.config(
   js.configs.recommended,
   ...ts.configs.recommended,
   prettier,
+
+  // Generated Files.
   {
     ignores: ['lib/**'],
   },
+
+  // (CommonJS) JavaScript Files.
   {
     files: ['**/*.js'],
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
     },
   },
+
+  // Test Files.
   {
     files: ['tests/**/*.js'],
     languageOptions: {
@@ -23,6 +29,8 @@ module.exports = ts.config(
       },
     },
   },
+
+  // Everything Else.
   {
     languageOptions: {
       globals: {
