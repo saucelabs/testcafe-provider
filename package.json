@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build": "rimraf ./lib && tsc",
-    "lint": "prettier ./src ./test --check && eslint ./src ./test",
-    "fmt": "prettier ./src --write",
+    "lint": "prettier --check '**/*.{js,ts,mjs,cjs}' && eslint .",
+    "fmt": "prettier --write '**/*.{js,ts,mjs,cjs}'",
     "link": "npm link && npm link testcafe-browser-provider-sauce",
     "prepare": "husky"
   },
@@ -22,16 +22,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "8.57.0",
     "@tsconfig/node20": "20.1.2",
-    "@typescript-eslint/eslint-plugin": "7.0.2",
-    "@typescript-eslint/parser": "7.0.2",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "husky": "9.0.11",
     "prettier": "3.2.5",
     "pretty-quick": "4.0.0",
     "rimraf": "5.0.5",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "typescript-eslint": "7.2.0"
   },
   "dependencies": {
     "saucelabs-connector": "2.0.0"

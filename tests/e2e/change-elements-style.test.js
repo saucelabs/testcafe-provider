@@ -1,4 +1,4 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction, Selector, fixture, test } from 'testcafe';
 
 fixture('Change Element Style').page(
   'https://devexpress.github.io/testcafe/example',
