@@ -1,6 +1,6 @@
 # testcafe-browser-provider-sauce
 
-This is the official Sauce Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
+This is the official SauceDriver Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
 ## Install
 
@@ -19,7 +19,7 @@ testcafe -b sauce
 When you run tests from the command line, use the alias when specifying browsers:
 
 ```
-testcafe sauce:browser1 'path/to/test/file.js'
+testcafe sauce:chrome 'path/to/test/file.js'
 ```
 
 When you use API, pass the alias to the `browsers()` method:
@@ -28,7 +28,7 @@ When you use API, pass the alias to the `browsers()` method:
 testCafe
   .createRunner()
   .src('path/to/test/file.js')
-  .browsers('sauce:browser1')
+  .browsers('sauce:chrome')
   .run();
 ```
 

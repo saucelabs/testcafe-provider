@@ -34,7 +34,8 @@
     "typescript-eslint": "7.2.0"
   },
   "dependencies": {
-    "saucelabs-connector": "2.0.0"
+    "saucelabs-connector": "2.0.0",
+    "webdriver": "7.33.0"
   },
   "peerDependencies": {
     "testcafe": "^2.0.0"
