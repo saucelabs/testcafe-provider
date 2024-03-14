@@ -1,6 +1,6 @@
 # testcafe-browser-provider-sauce
 
-This is the official SauceDriver Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
+This is the official Sauce Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
 ## Install
 
