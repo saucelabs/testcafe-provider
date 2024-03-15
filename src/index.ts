@@ -86,7 +86,7 @@ module.exports = {
 
   /**
    * Called by TestCafe at the end of the test run.
-   * Performs any cleanups necessary.
+   * Perform any cleanups necessary here.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L85
    */
