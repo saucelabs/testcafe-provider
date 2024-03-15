@@ -3,6 +3,13 @@ import { AuthError, TunnelNameError } from './errors';
 
 let sauceDriver: SauceDriver;
 
+/**
+ * The Sauce Labs browser provider plugin for TestCafe.
+ *
+ * CAUTION: Do not export the `default` keyword, as TestCafe will not be able to
+ * load the plugin. Neither does it support the `exports =` syntax without
+ * `module`.
+ */
 module.exports = {
   /**
    * Inspected by TestCafe to check whether the browser provider supports
