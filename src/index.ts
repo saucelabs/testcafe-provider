@@ -58,8 +58,12 @@ module.exports = {
     // TODO check tunnel status and wait if necessary
     // See https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/readiness-checks/.
 
-    console.log('Starting browser on SauceDriver Labs...');
-    const { jobUrl } = await sauceDriver.openBrowser(url, browserName);
+    console.log('Starting browser on Sauce Labs...');
+    const { jobUrl } = await sauceDriver.openBrowser(
+      browserId,
+      url,
+      browserName,
+    );
     console.log('Browser started.');
 
     // Pass the job URL to TestCafe, which it will append to the test report.
@@ -91,7 +95,7 @@ module.exports = {
   /**
    * Called by TestCafe to get the list of available browsers.
    *
-   * E.g. `"testcafe -b sauceDriver"` will call this method to print the available
+   * E.g. `"testcafe -b sauce"` will call this method to print the available
    * browsers.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L91
@@ -103,7 +107,7 @@ module.exports = {
   /**
    * Called by TestCafe to verify if the user specified browser is valid.
    *
-   * E.g. `"testcafe -b sauceDriver:chrome:latest"` will call this method to verify.
+   * E.g. `"testcafe -b sauce:chrome@latest"` will call this method to verify.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L95
    * @param browserName

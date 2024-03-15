@@ -12,7 +12,7 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
   }
 
-  async openBrowser(url: string, browserName: string) {
+  async openBrowser(browserId: string, url: string, browserName: string) {
     const webDriver = await WebDriver.newSession({
       protocol: 'https',
       hostname: `ondemand.saucelabs.com`, // TODO multi region support
@@ -31,7 +31,7 @@ export class SauceDriver {
       connectionRetryCount: 3,
       path: '/wd/hub',
     });
-    this.sessions.set(browserName, webDriver);
+    this.sessions.set(browserId, webDriver);
 
     // TODO do we need a keep-alive?
 
