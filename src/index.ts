@@ -5,7 +5,8 @@ let sauceDriver: SauceDriver;
 
 module.exports = {
   /**
-   * Indicates whether the browser provider supports multiple browsers.
+   * Inspected by TestCafe to check whether the browser provider supports
+   * multiple browsers.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/index.ts#L65
    */
