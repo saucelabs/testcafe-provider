@@ -38,6 +38,6 @@
     "webdriver": "7.33.0"
   },
   "peerDependencies": {
-    "testcafe": "^2.0.0"
+    "testcafe": ">=3.2.0"
   }
 }
