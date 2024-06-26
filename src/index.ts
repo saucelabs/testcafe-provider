@@ -70,7 +70,7 @@ module.exports = {
     //  Output:
     //    Running tests in:
     //    - Chrome 122.0.0.0 / Windows 10 (https://app.saucelabs.com/tests/8545f0fb12a24da290af1f6b87dcc530)
-    this.setUserAgentMetaInfo(browserId, jobUrl);
+    this.setUserAgentMetaInfo(browserId, jobUrl, { appendToUserAgent: true });
   },
 
   /**
