@@ -1,6 +1,6 @@
 {
   "name": "testcafe-browser-provider-sauce",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Official Sauce Labs TestCafe browser provider plugin.",
   "repository": "https://github.com/saucelabs/testcafe-provider",
   "author": "devx <devx@saucelabs.com>",
@@ -38,6 +38,6 @@
     "webdriver": "7.33.0"
   },
   "peerDependencies": {
-    "testcafe": "^2.0.0"
+    "testcafe": ">=3.2.0"
   }
 }
