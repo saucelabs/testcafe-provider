@@ -1,4 +1,4 @@
-import WebDriver, { Client } from 'webdriver';
+import wd, { Client } from 'webdriver';
 
 export class SauceDriver {
   private readonly username: string;
@@ -13,18 +13,21 @@ export class SauceDriver {
   }
 
   async openBrowser(browserId: string, url: string, browserName: string) {
-    const webDriver = await WebDriver.newSession({
+    const webDriver = await wd.newSession({
       protocol: 'https',
       hostname: `ondemand.saucelabs.com`, // TODO multi region support
       port: 443,
       user: this.username,
       key: this.accessKey,
       capabilities: {
-        name: 'testcafe sauce provider job', // TODO make this configurable
         browserName: browserName,
-        buildName: 'TCPRVDR', // TODO make this configurable
-        tunnelIdentifier: this.tunnelName,
-        idleTimeout: 3600, // 1 hour
+        'sauce:options': {
+          name: 'testcafe sauce provider job', // TODO make this configurable
+          build: 'TCPRVDR', // TODO make this configurable
+          tunnelIdentifier: this.tunnelName,
+          idleTimeout: 3600, // 1 hour
+          enableTestReport: true,
+        } as WebDriver.DesiredCapabilities,
       },
       logLevel: 'error',
       connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
