@@ -1,5 +1,6 @@
 import { SauceDriver } from './driver.js';
 import { AuthError, TunnelNameError } from './errors';
+import { getPlatforms } from './api';
 
 let sauceDriver: SauceDriver;
 
@@ -101,7 +102,10 @@ module.exports = {
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L91
    */
   async getBrowserList(): Promise<string[]> {
-    return ['chrome'];
+    const username = process.env.SAUCE_USERNAME ?? '';
+    const accessKey = process.env.SAUCE_ACCESS_KEY ?? '';
+    const browsers = await getPlatforms({ username, accessKey });
+    return browsers;
   },
 
   /**
