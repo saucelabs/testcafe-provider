@@ -23,6 +23,10 @@ export interface Platform {
   os: string;
 }
 
+type Browser = string;
+type Version = string;
+type Os = string;
+
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -37,14 +41,30 @@ export async function getPlatforms(params: {
       },
     },
   );
-  return resp.data.map((p) => {
-    switch (p.api_name) {
-      case 'iphone':
-      case 'ipad':
-      case 'android':
-        return `${p.long_name}@${p.short_version}`;
-      default:
-        return `${p.api_name}@${p.short_version}:${p.os}`;
+
+  const browserMap = new Map<Browser, Map<Version, Os>>();
+  resp.data.forEach((p) => {
+    let name = p.api_name;
+    if (name === 'iphone' || name === 'ipad' || name === 'android') {
+      name = p.long_name;
     }
+    if (!browserMap.has(name)) {
+      browserMap.set(name, new Map<Version, Os>());
+    }
+
+    browserMap.get(name)?.set(p.short_version, p.os);
   });
+
+  const browsers = [...browserMap.keys()].sort();
+  return browsers;
+  // return resp.data.map((p) => {
+  //   switch (p.api_name) {
+  //     case 'iphone':
+  //     case 'ipad':
+  //     case 'android':
+  //       return `${p.long_name}@${p.short_version}`;
+  //     default:
+  //       return `${p.api_name}@${p.short_version}:${p.os}`;
+  //   }
+  // });
 }

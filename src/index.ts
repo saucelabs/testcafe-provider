@@ -105,6 +105,7 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME ?? '';
     const accessKey = process.env.SAUCE_ACCESS_KEY ?? '';
     const browsers = await getPlatforms({ username, accessKey });
+
     return browsers;
   },
 
