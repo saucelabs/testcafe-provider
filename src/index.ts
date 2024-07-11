@@ -9,6 +9,8 @@ type Os = string;
 
 let sauceDriver: SauceDriver;
 
+let platforms: string[];
+
 /**
  * The Sauce Labs browser provider plugin for TestCafe.
  *
@@ -43,6 +45,45 @@ module.exports = {
     }
 
     sauceDriver = new SauceDriver(username, accessKey, tunnelName);
+    const resp = await getPlatforms({ username, accessKey });
+    const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
+    resp.data.forEach((p) => {
+      let name = p.api_name;
+      if (name === 'iphone' || name === 'ipad' || name === 'android') {
+        name = p.long_name;
+      }
+      const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
+
+      const osList = versionMap.get(p.short_version) ?? new Set<Os>();
+      osList.add(p.os);
+
+      versionMap.set(p.short_version, osList);
+      browserMap.set(name, versionMap);
+    });
+
+    const browserNames = ['chrome', 'firefox', 'safari'];
+
+    platforms = [];
+
+    browserNames.forEach((name) => {
+      const versionMap = browserMap.get(name);
+      if (!versionMap) {
+        return;
+      }
+      [...versionMap.keys()]
+        .sort(rcompareVersions)
+        .slice(0, 6)
+        .forEach((v) => {
+          const oses = versionMap.get(v);
+          if (!oses) {
+            return;
+          }
+
+          [...oses].sort(rcompareOses).forEach((os) => {
+            platforms.push(`${name}@${v}:${os}`);
+          });
+        });
+    });
   },
 
   /**
@@ -112,48 +153,7 @@ module.exports = {
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L91
    */
   async getBrowserList(): Promise<string[]> {
-    const username = process.env.SAUCE_USERNAME ?? '';
-    const accessKey = process.env.SAUCE_ACCESS_KEY ?? '';
-    const resp = await getPlatforms({ username, accessKey });
-    const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
-    resp.data.forEach((p) => {
-      let name = p.api_name;
-      if (name === 'iphone' || name === 'ipad' || name === 'android') {
-        name = p.long_name;
-      }
-      const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
-
-      const osList = versionMap.get(p.short_version) ?? new Set<Os>();
-      osList.add(p.os);
-
-      versionMap.set(p.short_version, osList);
-      browserMap.set(name, versionMap);
-    });
-
-    const browserNames = ['chrome', 'firefox', 'safari'];
-
-    const allPlatforms: string[] = [];
-
-    browserNames.forEach((name) => {
-      const versionMap = browserMap.get(name);
-      if (!versionMap) {
-        return;
-      }
-      [...versionMap.keys()]
-        .sort(rcompareVersions)
-        .slice(0, 6)
-        .forEach((v) => {
-          const oses = versionMap.get(v);
-          if (!oses) {
-            return;
-          }
-
-          [...oses].sort(rcompareOses).forEach((os) => {
-            allPlatforms.push(`${name}@${v}:${os}`);
-          });
-        });
-    });
-    return allPlatforms;
+    return platforms;
   },
 
   /**
@@ -165,7 +165,7 @@ module.exports = {
    * @param browserName
    */
   async isValidBrowserName(browserName: string): Promise<boolean> {
-    return (await this.getBrowserList()).includes(browserName);
+    return platforms.includes(browserName);
   },
 
   /**
