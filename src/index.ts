@@ -65,10 +65,15 @@ module.exports = {
     // See https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/readiness-checks/.
 
     console.log('Starting browser on Sauce Labs...');
+    const [browser, os] = browserName.split(':');
+    const [bName, bVersion] = browser.split('@');
+
     const { jobUrl } = await sauceDriver.openBrowser(
       browserId,
       url,
-      browserName,
+      bName,
+      bVersion,
+      os,
     );
     console.log('Browser started.');
 

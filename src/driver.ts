@@ -12,7 +12,13 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
   }
 
-  async openBrowser(browserId: string, url: string, browserName: string) {
+  async openBrowser(
+    browserId: string,
+    url: string,
+    browserName: string,
+    browserVersion: string,
+    platformName: string,
+  ) {
     const webDriver = await wd.newSession({
       protocol: 'https',
       hostname: `ondemand.saucelabs.com`, // TODO multi region support
@@ -20,7 +26,9 @@ export class SauceDriver {
       user: this.username,
       key: this.accessKey,
       capabilities: {
-        browserName: browserName,
+        browserName,
+        browserVersion,
+        platformName,
         'sauce:options': {
           name: 'testcafe sauce provider job', // TODO make this configurable
           build: 'TCPRVDR', // TODO make this configurable
