@@ -44,8 +44,15 @@ export function rcompareOses(osA: string, osB: string) {
     if (nameA.toLowerCase() === 'windows') {
       return -1;
     }
-    // NOTE: Sink Mac down
+    // NOTE: Sink Linux down
+    if (nameA.toLowerCase() === 'linux') {
+      return 1;
+    }
+    // NOTE: Mac in the middle
     if (nameA.toLowerCase() === 'mac') {
+      if (nameB.toLowerCase() === 'linux') {
+        return -1;
+      }
       return 1;
     }
     return 0;
