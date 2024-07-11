@@ -31,3 +31,29 @@ export function rcompareVersions(versionA: string, versionB: string) {
   }
   return 0;
 }
+
+export function rcompareOses(osA: string, osB: string) {
+  const [nameA = '', versionA = ''] = osA.split(' ');
+  const [nameB = '', versionB = ''] = osB.split(' ');
+
+  const semVerA = coerce(versionA);
+  const semVerB = coerce(versionB);
+
+  if (nameA !== nameB) {
+    // NOTE: Bubble Windows up
+    if (nameA.toLowerCase() === 'windows') {
+      return -1;
+    }
+    // NOTE: Sink Mac down
+    if (nameA.toLowerCase() === 'mac') {
+      return 1;
+    }
+    return 0;
+  }
+
+  if (semVerA && semVerB) {
+    return rcompare(semVerA, semVerB);
+  }
+
+  return 0;
+}

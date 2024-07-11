@@ -1,6 +1,11 @@
 import { SauceDriver } from './driver.js';
 import { AuthError, TunnelNameError } from './errors';
 import { getPlatforms } from './api';
+import { rcompareOses, rcompareVersions } from './sort';
+
+type Browser = string;
+type Version = string;
+type Os = string;
 
 let sauceDriver: SauceDriver;
 
@@ -104,9 +109,46 @@ module.exports = {
   async getBrowserList(): Promise<string[]> {
     const username = process.env.SAUCE_USERNAME ?? '';
     const accessKey = process.env.SAUCE_ACCESS_KEY ?? '';
-    const browsers = await getPlatforms({ username, accessKey });
+    const resp = await getPlatforms({ username, accessKey });
+    const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
+    resp.data.forEach((p) => {
+      let name = p.api_name;
+      if (name === 'iphone' || name === 'ipad' || name === 'android') {
+        name = p.long_name;
+      }
+      const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
 
-    return browsers;
+      const osList = versionMap.get(p.short_version) ?? new Set<Os>();
+      osList.add(p.os);
+
+      versionMap.set(p.short_version, osList);
+      browserMap.set(name, versionMap);
+    });
+
+    const browserNames = ['chrome', 'firefox', 'safari'];
+
+    const allPlatforms: string[] = [];
+
+    browserNames.forEach((name) => {
+      const versionMap = browserMap.get(name);
+      if (!versionMap) {
+        return;
+      }
+      [...versionMap.keys()]
+        .sort(rcompareVersions)
+        .slice(0, 6)
+        .forEach((v) => {
+          const oses = versionMap.get(v);
+          if (!oses) {
+            return;
+          }
+
+          [...oses].sort(rcompareOses).forEach((os) => {
+            allPlatforms.push(`${name}@${v}:${os}`);
+          });
+        });
+    });
+    return allPlatforms;
   },
 
   /**

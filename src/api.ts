@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import { rcompareVersions } from './sort';
-
 export interface Platform {
   // "short_version": "27",
   short_version: string;
@@ -25,10 +23,6 @@ export interface Platform {
   os: string;
 }
 
-type Browser = string;
-type Version = string;
-type Os = string;
-
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -44,43 +38,5 @@ export async function getPlatforms(params: {
     },
   );
 
-  const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
-  resp.data.forEach((p) => {
-    let name = p.api_name;
-    if (name === 'iphone' || name === 'ipad' || name === 'android') {
-      name = p.long_name;
-    }
-    const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
-
-    const osList = versionMap.get(p.short_version) ?? new Set<Os>();
-    osList.add(p.os);
-
-    versionMap.set(p.short_version, osList);
-    browserMap.set(name, versionMap);
-  });
-
-  const browserNames = ['chrome', 'firefox', 'safari'];
-
-  const allPlatforms: string[] = [];
-
-  browserNames.forEach((name) => {
-    const versionMap = browserMap.get(name);
-    if (!versionMap) {
-      return;
-    }
-    [...versionMap.keys()]
-      .sort(rcompareVersions)
-      .slice(0, 9)
-      .forEach((v) => {
-        const oses = versionMap.get(v);
-        if (!oses) {
-          return;
-        }
-
-        oses.forEach((os) => {
-          allPlatforms.push(`${name}@${v}:${os}`);
-        });
-      });
-  });
-  return allPlatforms;
+  return resp;
 }
