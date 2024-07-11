@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { rcompare, coerce } from 'semver';
 
 export interface Platform {
   // "short_version": "27",
@@ -27,6 +28,37 @@ type Browser = string;
 type Version = string;
 type Os = string;
 
+function rcompareVersions(versionA: string, versionB: string) {
+  const semVerA = coerce(versionA);
+  const semVerB = coerce(versionB);
+
+  if (semVerA && semVerB) {
+    return rcompare(semVerA, semVerB);
+  }
+
+  // NOTE: Satisfy reflexivity requirement
+  if (versionA === versionB) {
+    return 0;
+  }
+
+  if (!semVerA) {
+    // NOTE: Bubble up 'dev' and 'beta'
+    if (versionA === 'dev' || (versionA === 'beta' && versionB !== 'dev')) {
+      return -1;
+    }
+    // NOTE: Bubble down everything else
+    return 1;
+  }
+  if (!semVerB) {
+    // NOTE: Bubble up 'dev' and 'beta'
+    if (versionB === 'dev' || (versionB === 'beta' && versionA !== 'dev')) {
+      return 1;
+    }
+    // NOTE: Bubble down everything else
+    return -1;
+  }
+  return 0;
+}
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -42,29 +74,43 @@ export async function getPlatforms(params: {
     },
   );
 
-  const browserMap = new Map<Browser, Map<Version, Os>>();
+  const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
   resp.data.forEach((p) => {
     let name = p.api_name;
     if (name === 'iphone' || name === 'ipad' || name === 'android') {
       name = p.long_name;
     }
-    if (!browserMap.has(name)) {
-      browserMap.set(name, new Map<Version, Os>());
-    }
+    const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
 
-    browserMap.get(name)?.set(p.short_version, p.os);
+    const osList = versionMap.get(p.short_version) ?? new Set<Os>();
+    osList.add(p.os);
+
+    versionMap.set(p.short_version, osList);
+    browserMap.set(name, versionMap);
   });
 
-  const browsers = [...browserMap.keys()].sort();
-  return browsers;
-  // return resp.data.map((p) => {
-  //   switch (p.api_name) {
-  //     case 'iphone':
-  //     case 'ipad':
-  //     case 'android':
-  //       return `${p.long_name}@${p.short_version}`;
-  //     default:
-  //       return `${p.api_name}@${p.short_version}:${p.os}`;
-  //   }
-  // });
+  const browserNames = ['chrome', 'firefox', 'safari'];
+
+  const allPlatforms: string[] = [];
+
+  browserNames.forEach((name) => {
+    const versionMap = browserMap.get(name);
+    if (!versionMap) {
+      return;
+    }
+    [...versionMap.keys()]
+      .sort(rcompareVersions)
+      .slice(0, 9)
+      .forEach((v) => {
+        const oses = versionMap.get(v);
+        if (!oses) {
+          return;
+        }
+
+        oses.forEach((os) => {
+          allPlatforms.push(`${name}@${v}:${os}`);
+        });
+      });
+  });
+  return allPlatforms;
 }
