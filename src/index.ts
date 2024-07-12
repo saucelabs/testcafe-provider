@@ -70,13 +70,19 @@ module.exports = {
       [...versionMap.keys()]
         .sort(rcompareVersions)
         .slice(0, 6)
-        .forEach((v) => {
+        .forEach((v, index) => {
           const oses = versionMap.get(v);
           if (!oses) {
             return;
           }
 
-          [...oses].sort(rcompareOses).forEach((os) => {
+          const sortedOsList = [...oses].sort(rcompareOses);
+          if (index === 0) {
+            sortedOsList.forEach((os) => {
+              platforms.push(`${name}@latest:${os}`);
+            });
+          }
+          sortedOsList.forEach((os) => {
             platforms.push(`${name}@${v}:${os}`);
           });
         });
