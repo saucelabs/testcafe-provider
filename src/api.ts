@@ -1,25 +1,31 @@
 import axios from 'axios';
 
 export interface Platform {
-  // "short_version": "27",
+  /**
+   * Major version of the platform, e.g. chrome 127
+   */
   short_version: string;
-  // "long_name": "Google Chrome",
-  // "long_name": "iPhone 11 Pro Simulator",
-  // "long_name": "Google Pixel 6 GoogleAPI Emulator",
-  // "long_name": "iPad Pro (12.9 inch) (3rd generation) Simulator",
+  /**
+   * The full name of the platform
+   * e.g.
+   *   - Google Chrome
+   *   - iPhone 11 Pro Simulator
+   *   - Google Pixel 6 GoogleAPI Emulator
+   *   - iPad Pro (12.9 inch) (3rd generation) Simulator
+   */
   long_name: string;
-  // "api_name": "chrome",
-  // "api_name": "iphone",
-  // "api_name": "android",
-  // "api_name": "ipad",
+  /**
+   * The internal name of the platform
+   * e.g.
+   *  - chrome
+   *  - iphone
+   *  - android
+   *  - ipad
+   */
   api_name: string;
-  // "long_version": "27.0.1453.116.",
-  // "long_version": string;
-  // "latest_stable_version": "27",
-  // "latest_stable_version": string;
-  // "automation_backend": "webdriver",
-  automation_backend: string;
-  // "os": "Windows 2008"
+  /**
+   * The operating system of the platform
+   */
   os: string;
 }
 

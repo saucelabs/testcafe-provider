@@ -9,7 +9,7 @@ type Os = string;
 
 let sauceDriver: SauceDriver;
 
-let platforms: string[];
+const platforms: string[] = [];
 
 /**
  * The Sauce Labs browser provider plugin for TestCafe.
@@ -45,27 +45,24 @@ module.exports = {
     }
 
     sauceDriver = new SauceDriver(username, accessKey, tunnelName);
+
     const resp = await getPlatforms({ username, accessKey });
     const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
     resp.data.forEach((p) => {
       let name = p.api_name;
       if (name === 'iphone' || name === 'ipad' || name === 'android') {
+        // NOTE: Prefer the full device name for mobile platforms
         name = p.long_name;
       }
       const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
-
       const osList = versionMap.get(p.short_version) ?? new Set<Os>();
-      osList.add(p.os);
 
+      osList.add(p.os);
       versionMap.set(p.short_version, osList);
       browserMap.set(name, versionMap);
     });
 
-    const browserNames = ['chrome', 'firefox', 'safari'];
-
-    platforms = [];
-
-    browserNames.forEach((name) => {
+    ['chrome', 'firefox', 'safari'].forEach((name) => {
       const versionMap = browserMap.get(name);
       if (!versionMap) {
         return;
