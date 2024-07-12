@@ -78,6 +78,8 @@ module.exports = {
 
           const sortedOsList = [...oses].sort(rcompareOses);
           if (index === 0) {
+            // NOTE: 'latest' is an alias supported by Sauce Labs
+            // but not returned when querying the API.
             sortedOsList.forEach((os) => {
               platforms.push(`${name}@latest:${os}`);
             });
