@@ -1,7 +1,15 @@
 import { SauceDriver } from './driver.js';
 import { AuthError, TunnelNameError } from './errors';
+import { getPlatforms } from './api';
+import { rcompareOses, rcompareVersions } from './sort';
+
+type Browser = string;
+type Version = string;
+type Os = string;
 
 let sauceDriver: SauceDriver;
+
+const platforms: string[] = [];
 
 /**
  * The Sauce Labs browser provider plugin for TestCafe.
@@ -37,6 +45,50 @@ module.exports = {
     }
 
     sauceDriver = new SauceDriver(username, accessKey, tunnelName);
+
+    const resp = await getPlatforms({ username, accessKey });
+    const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
+    resp.data.forEach((p) => {
+      let name = p.api_name;
+      if (name === 'iphone' || name === 'ipad' || name === 'android') {
+        // NOTE: Prefer the full device name for mobile platforms
+        name = p.long_name;
+      }
+      const versionMap = browserMap.get(name) ?? new Map<Version, Set<Os>>();
+      const osList = versionMap.get(p.short_version) ?? new Set<Os>();
+
+      osList.add(p.os);
+      versionMap.set(p.short_version, osList);
+      browserMap.set(name, versionMap);
+    });
+
+    ['chrome', 'firefox', 'safari'].forEach((name) => {
+      const versionMap = browserMap.get(name);
+      if (!versionMap) {
+        return;
+      }
+      [...versionMap.keys()]
+        .sort(rcompareVersions)
+        .slice(0, 6)
+        .forEach((v, index) => {
+          const oses = versionMap.get(v);
+          if (!oses) {
+            return;
+          }
+
+          const sortedOsList = [...oses].sort(rcompareOses);
+          if (index === 0) {
+            // NOTE: 'latest' is an alias supported by Sauce Labs
+            // but not returned when querying the API.
+            sortedOsList.forEach((os) => {
+              platforms.push(`${name}@latest:${os}`);
+            });
+          }
+          sortedOsList.forEach((os) => {
+            platforms.push(`${name}@${v}:${os}`);
+          });
+        });
+    });
   },
 
   /**
@@ -59,10 +111,15 @@ module.exports = {
     // See https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/readiness-checks/.
 
     console.log('Starting browser on Sauce Labs...');
+    const [browser, os] = browserName.split(':');
+    const [bName, bVersion] = browser.split('@');
+
     const { jobUrl } = await sauceDriver.openBrowser(
       browserId,
       url,
-      browserName,
+      bName,
+      bVersion,
+      os,
     );
     console.log('Browser started.');
 
@@ -101,7 +158,7 @@ module.exports = {
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L91
    */
   async getBrowserList(): Promise<string[]> {
-    return ['chrome'];
+    return platforms;
   },
 
   /**
@@ -113,7 +170,7 @@ module.exports = {
    * @param browserName
    */
   async isValidBrowserName(browserName: string): Promise<boolean> {
-    return (await this.getBrowserList()).includes(browserName);
+    return platforms.includes(browserName);
   },
 
   /**

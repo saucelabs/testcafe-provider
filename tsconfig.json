@@ -4,5 +4,8 @@
     "outDir": "./lib",
     "allowJs": true
   },
+  "emit": {
+    "downlevelIteration": true
+  },
   "include": ["./src/**/*"]
 }
