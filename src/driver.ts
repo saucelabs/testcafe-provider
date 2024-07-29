@@ -54,28 +54,22 @@ export class SauceDriver {
     browserVersion: string,
     platformName: string,
   ) {
-    let webDriver: Client;
-    try {
-      webDriver = await wd.newSession({
-        protocol: 'https',
-        hostname: `ondemand.us-west-1.saucelabs.com`, // TODO multi region support
-        port: 443,
-        user: this.username,
-        key: this.accessKey,
-        capabilities: this.createCapabilities(
-          browserName,
-          browserVersion,
-          platformName,
-        ),
-        logLevel: 'error',
-        connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
-        connectionRetryCount: 3,
-        path: '/wd/hub',
-      });
-    } catch (e) {
-      console.error('Failed to create job on Sauce Lab: ', e);
-      return { jobUrl: '' };
-    }
+    const webDriver = await wd.newSession({
+      protocol: 'https',
+      hostname: `ondemand.us-west-1.saucelabs.com`, // TODO multi region support
+      port: 443,
+      user: this.username,
+      key: this.accessKey,
+      capabilities: this.createCapabilities(
+        browserName,
+        browserVersion,
+        platformName,
+      ),
+      logLevel: 'error',
+      connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
+      connectionRetryCount: 3,
+      path: '/wd/hub',
+    });
     if (!webDriver.sessionId) {
       throw new CreateSessionError();
     }
