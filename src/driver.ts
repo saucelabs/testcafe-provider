@@ -19,19 +19,21 @@ export class SauceDriver {
     browserVersion: string,
     platformName: string,
   ): WebDriver.Capabilities {
+    const sauceOpts = {
+      name: 'testcafe sauce provider job', // TODO make this configurable
+      build: 'TCPRVDR', // TODO make this configurable
+      tunnelIdentifier: this.tunnelName,
+      idleTimeout: 3600, // 1 hour
+      enableTestReport: true,
+    };
+
     if (!isDevice(browserName)) {
       return {
         browserName,
         browserVersion,
         platformName,
-        'sauce:options': {
-          name: 'testcafe sauce provider job', // TODO make this configurable
-          build: 'TCPRVDR', // TODO make this configurable
-          tunnelIdentifier: this.tunnelName,
-          idleTimeout: 3600, // 1 hour
-          enableTestReport: true,
-        },
-      } as WebDriver.Capabilities;
+        'sauce:options': sauceOpts,
+      };
     }
 
     const isSim = isSimulator(browserName);
@@ -41,14 +43,8 @@ export class SauceDriver {
       'appium:deviceName': browserName,
       'appium:platformVersion': browserVersion,
       'appium:automationName': isSim ? 'XCUITest' : 'UiAutomator2',
-      'sauce:options': {
-        name: 'testcafe sauce provider job', // TODO make this configurable
-        build: 'TCPRVDR', // TODO make this configurable
-        tunnelIdentifier: this.tunnelName,
-        idleTimeout: 3600, // 1 hour
-        enableTestReport: true,
-      },
-    } as WebDriver.Capabilities;
+      'sauce:options': sauceOpts,
+    };
   }
 
   async openBrowser(
