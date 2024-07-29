@@ -2,6 +2,7 @@ import { SauceDriver } from './driver.js';
 import { AuthError, TunnelNameError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
+import { isDevice } from './device.js';
 
 type Browser = string;
 type Version = string;
@@ -89,6 +90,27 @@ module.exports = {
           });
         });
     });
+
+    const devices: string[] = [];
+    browserMap.forEach((versionMap, name) => {
+      if (!isDevice(name)) {
+        return;
+      }
+      [...versionMap.keys()]
+        .sort(rcompareVersions)
+        .slice(0, 2)
+        .forEach((v) => {
+          const oses = versionMap.get(v);
+          if (!oses) {
+            return;
+          }
+          oses.forEach((os) => {
+            devices.push(`${name}@${v}:${os}`);
+          });
+        });
+    });
+    devices.sort().reverse();
+    platforms.push(...devices);
   },
 
   /**

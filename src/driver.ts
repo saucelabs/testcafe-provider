@@ -1,4 +1,6 @@
 import wd, { Client } from 'webdriver';
+import { isDevice, isSimulator } from './device';
+import { CreateSessionError } from './errors';
 
 export class SauceDriver {
   private readonly username: string;
@@ -12,6 +14,39 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
   }
 
+  createCapabilities(
+    browserName: string,
+    browserVersion: string,
+    platformName: string,
+  ): WebDriver.Capabilities {
+    const sauceOpts = {
+      name: 'testcafe sauce provider job', // TODO make this configurable
+      build: 'TCPRVDR', // TODO make this configurable
+      tunnelIdentifier: this.tunnelName,
+      idleTimeout: 3600, // 1 hour
+      enableTestReport: true,
+    };
+
+    if (!isDevice(browserName)) {
+      return {
+        browserName,
+        browserVersion,
+        platformName,
+        'sauce:options': sauceOpts,
+      };
+    }
+
+    const isSim = isSimulator(browserName);
+    return {
+      browserName: isSim ? 'Safari' : 'Chrome',
+      platformName: isSim ? 'iOS' : 'Android',
+      'appium:deviceName': browserName,
+      'appium:platformVersion': browserVersion,
+      'appium:automationName': isSim ? 'XCUITest' : 'UiAutomator2',
+      'sauce:options': sauceOpts,
+    };
+  }
+
   async openBrowser(
     browserId: string,
     url: string,
@@ -21,27 +56,24 @@ export class SauceDriver {
   ) {
     const webDriver = await wd.newSession({
       protocol: 'https',
-      hostname: `ondemand.saucelabs.com`, // TODO multi region support
+      hostname: `ondemand.us-west-1.saucelabs.com`, // TODO multi region support
       port: 443,
       user: this.username,
       key: this.accessKey,
-      capabilities: {
+      capabilities: this.createCapabilities(
         browserName,
         browserVersion,
         platformName,
-        'sauce:options': {
-          name: 'testcafe sauce provider job', // TODO make this configurable
-          build: 'TCPRVDR', // TODO make this configurable
-          tunnelIdentifier: this.tunnelName,
-          idleTimeout: 3600, // 1 hour
-          enableTestReport: true,
-        } as WebDriver.DesiredCapabilities,
-      },
+      ),
       logLevel: 'error',
       connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
       connectionRetryCount: 3,
       path: '/wd/hub',
     });
+    if (!webDriver.sessionId) {
+      throw new CreateSessionError();
+    }
+
     this.sessions.set(browserId, webDriver);
 
     // TODO do we need a keep-alive?

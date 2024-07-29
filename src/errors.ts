@@ -17,3 +17,10 @@ export class TunnelNameError extends Error {
     this.name = 'TunnelNameError';
   }
 }
+
+export class CreateSessionError extends Error {
+  constructor() {
+    super('Failed to run test on Sauce Labs: no session id returned');
+    this.name = 'CreateSessionError';
+  }
+}
