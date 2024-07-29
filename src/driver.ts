@@ -1,4 +1,6 @@
 import wd, { Client } from 'webdriver';
+import { isDevice, isSimulator } from './runtypes';
+import { CreateSessionError } from './errors';
 
 export class SauceDriver {
   private readonly username: string;
@@ -12,20 +14,13 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
   }
 
-  async openBrowser(
-    browserId: string,
-    url: string,
+  createCapabilities(
     browserName: string,
     browserVersion: string,
     platformName: string,
-  ) {
-    const webDriver = await wd.newSession({
-      protocol: 'https',
-      hostname: `ondemand.saucelabs.com`, // TODO multi region support
-      port: 443,
-      user: this.username,
-      key: this.accessKey,
-      capabilities: {
+  ): WebDriver.Capabilities {
+    if (!isDevice(browserName)) {
+      return {
         browserName,
         browserVersion,
         platformName,
@@ -35,13 +30,60 @@ export class SauceDriver {
           tunnelIdentifier: this.tunnelName,
           idleTimeout: 3600, // 1 hour
           enableTestReport: true,
-        } as WebDriver.DesiredCapabilities,
+        },
+      } as WebDriver.Capabilities;
+    }
+
+    const isSim = isSimulator(browserName);
+    return {
+      browserName: isSim ? 'Safari' : 'Chrome',
+      platformName: isSim ? 'iOS' : 'Android',
+      'appium:deviceName': browserName,
+      'appium:platformVersion': browserVersion,
+      'appium:automationName': isSim ? 'XCUITest' : 'UiAutomator2',
+      'sauce:options': {
+        name: 'testcafe sauce provider job', // TODO make this configurable
+        build: 'TCPRVDR', // TODO make this configurable
+        tunnelIdentifier: this.tunnelName,
+        idleTimeout: 3600, // 1 hour
+        enableTestReport: true,
       },
-      logLevel: 'error',
-      connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
-      connectionRetryCount: 3,
-      path: '/wd/hub',
-    });
+    } as WebDriver.Capabilities;
+  }
+
+  async openBrowser(
+    browserId: string,
+    url: string,
+    browserName: string,
+    browserVersion: string,
+    platformName: string,
+  ) {
+    let webDriver: Client;
+    try {
+      webDriver = await wd.newSession({
+        protocol: 'https',
+        hostname: `ondemand.us-west-1.saucelabs.com`, // TODO multi region support
+        port: 443,
+        user: this.username,
+        key: this.accessKey,
+        capabilities: this.createCapabilities(
+          browserName,
+          browserVersion,
+          platformName,
+        ),
+        logLevel: 'error',
+        connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
+        connectionRetryCount: 3,
+        path: '/wd/hub',
+      });
+    } catch (e) {
+      console.error('Failed to create job on Sauce Lab: ', e);
+      return { jobUrl: '' };
+    }
+    if (!webDriver.sessionId) {
+      throw new CreateSessionError();
+    }
+
     this.sessions.set(browserId, webDriver);
 
     // TODO do we need a keep-alive?
