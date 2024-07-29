@@ -2,7 +2,7 @@ import { SauceDriver } from './driver.js';
 import { AuthError, TunnelNameError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
-import { isDevice } from './runtypes.js';
+import { isDevice } from './device.js';
 
 type Browser = string;
 type Version = string;

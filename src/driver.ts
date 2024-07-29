@@ -1,5 +1,5 @@
 import wd, { Client } from 'webdriver';
-import { isDevice, isSimulator } from './runtypes';
+import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
 
 export class SauceDriver {
