@@ -1,7 +1,7 @@
 import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
-import { getNewWindowSize, getWindowSize, setWindowSize } from './window';
+import { getNewWindowSize, setWindowSize } from './window';
 
 export class SauceDriver {
   private readonly username: string;
@@ -104,13 +104,17 @@ export class SauceDriver {
       return;
     }
 
-    const currentWindowSize = await getWindowSize(browser);
+    const { width: currentWindowWidth, height: currentWindowHeight } =
+      await browser.getWindowRect();
     const newWindowSize = getNewWindowSize(
       {
         width: currentWidth,
         height: currentHeight,
       },
-      currentWindowSize,
+      {
+        width: currentWindowWidth,
+        height: currentWindowHeight,
+      },
       { width, height },
     );
 

@@ -10,16 +10,6 @@ export type Size = {
 export const maxWindowSize = 2 ** 31 - 1;
 
 /**
- * getWindowSize returns the size of the browser, including its utility area like menu and toolbar.
- * @param browser - The browser client instance.
- * @returns Size of the browser window.
- */
-export async function getWindowSize(browser: Client): Promise<Size> {
-  const { width, height } = await browser.getWindowRect();
-  return { width, height };
-}
-
-/**
  * getNewWindowSize calculates the required browser window size to accommodate the requested viewport size.
  * @param currentViewport - The current size of the viewport.
  * @param currentWindowSize - The current size of the browser window, including its utility area.
@@ -47,8 +37,6 @@ export async function setWindowSize(browser: Client, WindowSize: Size) {
   if (isNaN(width) || isNaN(height)) {
     throw new WindowSizeNaNError();
   }
-
-  if (!browser.isW3C) return browser._setWindowSize(width, height);
 
   return await browser.setWindowRect(null, null, width, height);
 }
