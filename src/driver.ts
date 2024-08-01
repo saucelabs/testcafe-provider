@@ -1,6 +1,6 @@
 import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
-import { CreateSessionError, WindowSizeTypeError } from './errors';
+import { CreateSessionError, WindowSizeNaNError } from './errors';
 
 type Size = {
   width: number;
@@ -133,7 +133,7 @@ export class SauceDriver {
   async setWindowSize(browser: Client, WindowSize: Size) {
     const { width, height } = WindowSize;
     if (isNaN(width) || isNaN(height)) {
-      throw new WindowSizeTypeError();
+      throw new WindowSizeNaNError();
     }
 
     if (!browser.isW3C) return browser._setWindowSize(width, height);

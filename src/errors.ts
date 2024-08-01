@@ -25,10 +25,12 @@ export class CreateSessionError extends Error {
   }
 }
 
-export class WindowSizeTypeError extends Error {
+export class WindowSizeNaNError extends Error {
   constructor() {
-    super('Invalid resize value type: width and height must be numbers.');
-    this.name = 'WindowSizeTypeError';
+    super(
+      'Failed to resize window: the calculated browser window width or height is not a valid number (NaN).',
+    );
+    this.name = 'WindowSizeNaNError';
   }
 }
 
