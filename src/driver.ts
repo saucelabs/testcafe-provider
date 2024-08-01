@@ -106,9 +106,9 @@ export class SauceDriver {
 
     const currentWindowSize = await browser.getWindowRect();
     const newWindowSize = getNewWindowSize(
+      viewport,
       currentViewport,
       currentWindowSize,
-      viewport,
     );
 
     await setWindowSize(browser, newWindowSize);

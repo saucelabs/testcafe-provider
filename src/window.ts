@@ -11,15 +11,15 @@ export const maxWindowSize = 2 ** 31 - 1;
 
 /**
  * getNewWindowSize calculates the required browser window size to accommodate the requested viewport size.
+ * @param requestedViewport - The requested viewport size.
  * @param currentViewport - The current size of the viewport.
  * @param currentWindowSize - The current size of the browser window, including its utility area.
- * @param requestedViewport - The desired viewport size.
  * @returns - The required browser window size.
  */
 export function getNewWindowSize(
+  requestedViewport: Size,
   currentViewport: Size,
   currentWindowSize: Size,
-  requestedViewport: Size,
 ): Size {
   const horizontalDiff = currentWindowSize.width - currentViewport.width;
   const verticalDiff = currentWindowSize.height - currentViewport.height;
