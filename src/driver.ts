@@ -1,12 +1,7 @@
 import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
-import { getNewWindowSize, getWindowSize, setWindowSize } from './window';
-
-type Size = {
-  width: number;
-  height: number;
-};
+import { getNewWindowSize, getWindowSize, setWindowSize, Size } from './window';
 
 export class SauceDriver {
   private readonly username: string;

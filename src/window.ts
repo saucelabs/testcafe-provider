@@ -1,7 +1,7 @@
 import { Client } from 'webdriver';
 import { WindowSizeNaNError } from './errors';
 
-type Size = {
+export type Size = {
   width: number;
   height: number;
 };
