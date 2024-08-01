@@ -1,5 +1,5 @@
 import { SauceDriver } from './driver.js';
-import { AuthError, TunnelNameError } from './errors';
+import { AuthError, TunnelNameError, WindowSizeRangeError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device.js';
@@ -7,6 +7,9 @@ import { isDevice } from './device.js';
 type Browser = string;
 type Version = string;
 type Os = string;
+
+// Maximum window size in pixels.
+const maxWindowSize = 2 ** 31 - 1;
 
 let sauceDriver: SauceDriver;
 
@@ -196,13 +199,30 @@ module.exports = {
   },
 
   /**
-   * Called by TestCafe to resize the browser window.
+   * Called by TestCafe to resize the browser window to match the requested viewport size.
    *
    * https://github.com/DevExpress/testcafe/blob/master/src/browser/provider/plugin-host.js#L126
+   *
+   * @param browserId - The id of the browser session.
+   * @param width - The requested viewport width in pixels.
+   * @param height - The requested viewport height in pixels.
+   * @param currentWidth - The current viewport width in pixels.
+   * @param currentHeight - The current viewport height in pixels.
    */
-  async resizeWindow(/* id, width, height, currentWidth, currentHeight */) {
-    this.reportWarning(
-      'The window resize functionality is not supported by the Sauce Labs browser provider plugin.',
+  async resizeWindow(
+    browserId: string,
+    width: number,
+    height: number,
+    currentWidth: number,
+    currentHeight: number,
+  ) {
+    if (width > maxWindowSize || height > maxWindowSize) {
+      throw new WindowSizeRangeError();
+    }
+    return sauceDriver.resizeWindow(
+      browserId,
+      { width, height },
+      { width: currentWidth, height: currentHeight },
     );
   },
 

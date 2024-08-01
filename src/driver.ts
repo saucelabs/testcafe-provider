@@ -2,6 +2,11 @@ import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
 
+export type Size = {
+  width: number;
+  height: number;
+};
+
 export class SauceDriver {
   private readonly username: string;
   private readonly accessKey: string;
@@ -89,5 +94,49 @@ export class SauceDriver {
   async closeBrowser(browserId: string) {
     await this.sessions.get(browserId)?.deleteSession();
     this.sessions.delete(browserId);
+  }
+
+  /**
+   * Calculates the required browser window size to accommodate the requested viewport size.
+   * @param newViewport - The requested viewport size.
+   * @param viewport - The current size of the viewport.
+   * @param windowSize - The current size of the browser window, including its utility area.
+   * @returns - The required browser window size.
+   */
+  getNewWindowSize(newViewport: Size, viewport: Size, windowSize: Size): Size {
+    const horizontalDiff = windowSize.width - viewport.width;
+    const verticalDiff = windowSize.height - viewport.height;
+
+    return {
+      width: newViewport.width + horizontalDiff,
+      height: newViewport.height + verticalDiff,
+    };
+  }
+
+  /**
+   * Resizes the browser window to match the requested viewport size.
+   * @param browserId - The ID of the browser session.
+   * @param viewport - The requested viewport size.
+   * @param currentViewport - The current viewport size.
+   */
+  async resizeWindow(browserId: string, viewport: Size, currentViewport: Size) {
+    const browser = this.sessions.get(browserId);
+    if (!browser) {
+      return;
+    }
+
+    const currentWindowSize = await browser.getWindowRect();
+    const newWindowSize = this.getNewWindowSize(
+      viewport,
+      currentViewport,
+      currentWindowSize,
+    );
+
+    await browser.setWindowRect(
+      null,
+      null,
+      newWindowSize.width,
+      newWindowSize.height,
+    );
   }
 }
