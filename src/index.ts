@@ -3,11 +3,13 @@ import { AuthError, TunnelNameError, WindowSizeRangeError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device.js';
-import { maxWindowSize } from './window.js';
 
 type Browser = string;
 type Version = string;
 type Os = string;
+
+// Maximum window size in pixels.
+export const maxWindowSize = 2 ** 31 - 1;
 
 let sauceDriver: SauceDriver;
 
