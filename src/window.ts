@@ -14,10 +14,7 @@ export const maxWindowSize = 2 ** 31 - 1;
  * @param browser - The browser client instance.
  * @returns Size of the browser window.
  */
-export async function getWindowSize(browser: Client) {
-  if (!browser.isW3C) {
-    return browser._getWindowSize();
-  }
+export async function getWindowSize(browser: Client): Promise<Size> {
   const { width, height } = await browser.getWindowRect();
   return { width, height };
 }
