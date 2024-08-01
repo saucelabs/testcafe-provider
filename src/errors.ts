@@ -25,15 +25,6 @@ export class CreateSessionError extends Error {
   }
 }
 
-export class WindowSizeNaNError extends Error {
-  constructor() {
-    super(
-      'Failed to resize window: the calculated browser window width or height is not a valid number (NaN).',
-    );
-    this.name = 'WindowSizeNaNError';
-  }
-}
-
 export class WindowSizeRangeError extends Error {
   constructor() {
     super(
