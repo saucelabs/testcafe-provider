@@ -219,10 +219,8 @@ module.exports = {
     }
     return sauceDriver.resizeWindow(
       browserId,
-      width,
-      height,
-      currentWidth,
-      currentHeight,
+      { width, height },
+      { width: currentWidth, height: currentHeight },
     );
   },
 

@@ -1,7 +1,7 @@
 import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
-import { getNewWindowSize, setWindowSize } from './window';
+import { getNewWindowSize, setWindowSize, Size } from './window';
 
 export class SauceDriver {
   private readonly username: string;
@@ -92,30 +92,23 @@ export class SauceDriver {
     this.sessions.delete(browserId);
   }
 
-  async resizeWindow(
-    browserId: string,
-    width: number,
-    height: number,
-    currentWidth: number,
-    currentHeight: number,
-  ) {
+  /**
+   * Resizes the browser window to match the requested viewport size.
+   * @param browserId - The ID of the browser session.
+   * @param viewport - The requested viewport size.
+   * @param currentViewport - The current viewport size.
+   */
+  async resizeWindow(browserId: string, viewport: Size, currentViewport: Size) {
     const browser = this.sessions.get(browserId);
     if (!browser) {
       return;
     }
 
-    const { width: currentWindowWidth, height: currentWindowHeight } =
-      await browser.getWindowRect();
+    const currentWindowSize = await browser.getWindowRect();
     const newWindowSize = getNewWindowSize(
-      {
-        width: currentWidth,
-        height: currentHeight,
-      },
-      {
-        width: currentWindowWidth,
-        height: currentWindowHeight,
-      },
-      { width, height },
+      currentViewport,
+      currentWindowSize,
+      viewport,
     );
 
     await setWindowSize(browser, newWindowSize);
