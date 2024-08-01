@@ -98,22 +98,18 @@ export class SauceDriver {
 
   /**
    * getNewWindowSize calculates the required browser window size to accommodate the requested viewport size.
-   * @param requestedViewport - The requested viewport size.
-   * @param currentViewport - The current size of the viewport.
-   * @param currentWindowSize - The current size of the browser window, including its utility area.
+   * @param newViewport - The requested viewport size.
+   * @param viewport - The current size of the viewport.
+   * @param windowSize - The current size of the browser window, including its utility area.
    * @returns - The required browser window size.
    */
-  getNewWindowSize(
-    requestedViewport: Size,
-    currentViewport: Size,
-    currentWindowSize: Size,
-  ): Size {
-    const horizontalDiff = currentWindowSize.width - currentViewport.width;
-    const verticalDiff = currentWindowSize.height - currentViewport.height;
+  getNewWindowSize(newViewport: Size, viewport: Size, windowSize: Size): Size {
+    const horizontalDiff = windowSize.width - viewport.width;
+    const verticalDiff = windowSize.height - viewport.height;
 
     return {
-      width: requestedViewport.width + horizontalDiff,
-      height: requestedViewport.height + verticalDiff,
+      width: newViewport.width + horizontalDiff,
+      height: newViewport.height + verticalDiff,
     };
   }
 
