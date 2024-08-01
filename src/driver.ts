@@ -1,6 +1,11 @@
 import wd, { Client } from 'webdriver';
 import { isDevice, isSimulator } from './device';
-import { CreateSessionError } from './errors';
+import { CreateSessionError, WindowSizeTypeError } from './errors';
+
+type Size = {
+  width: number;
+  height: number;
+};
 
 export class SauceDriver {
   private readonly username: string;
@@ -89,5 +94,75 @@ export class SauceDriver {
   async closeBrowser(browserId: string) {
     await this.sessions.get(browserId)?.deleteSession();
     this.sessions.delete(browserId);
+  }
+
+  /**
+   * getWindowSize returns the size of the browser, including its utility area like menu and toolbar.
+   * @param browser - The browser client instance.
+   * @returns Size of the browser window.
+   */
+  async getWindowSize(browser: Client) {
+    if (!browser.isW3C) {
+      return browser._getWindowSize();
+    }
+    const { width, height } = await browser.getWindowRect();
+    return { width, height };
+  }
+
+  /**
+   * getRequestedWindowSize calculates the required browser window size to accommodate the requested viewport size.
+   * @param currentViewport - The current size of the viewport.
+   * @param currentWindowSize - The current size of the browser window, including its utility area.
+   * @param requestedViewport - The desired viewport size.
+   * @returns - The required browser window size.
+   */
+  getRequestedWindowSize(
+    currentViewport: Size,
+    currentWindowSize: Size,
+    requestedViewport: Size,
+  ): Size {
+    const horizontalDiff = currentWindowSize.width - currentViewport.width;
+    const verticalDiff = currentWindowSize.height - currentViewport.height;
+
+    return {
+      width: requestedViewport.width + horizontalDiff,
+      height: requestedViewport.height + verticalDiff,
+    };
+  }
+
+  async setWindowSize(browser: Client, WindowSize: Size) {
+    const { width, height } = WindowSize;
+    if (isNaN(width) || isNaN(height)) {
+      throw new WindowSizeTypeError();
+    }
+
+    if (!browser.isW3C) return browser._setWindowSize(width, height);
+
+    return await browser.setWindowRect(null, null, width, height);
+  }
+
+  async resizeWindow(
+    browserId: string,
+    width: number,
+    height: number,
+    currentWidth: number,
+    currentHeight: number,
+  ) {
+    const browser = this.sessions.get(browserId);
+    if (!browser) {
+      return;
+    }
+
+    const currentWindowSize = await this.getWindowSize(browser);
+    const requestedWindowSize = this.getRequestedWindowSize(
+      {
+        width: currentWidth,
+        height: currentHeight,
+      },
+      currentWindowSize as Size,
+      { width, height },
+    );
+
+    await this.setWindowSize(browser, requestedWindowSize);
   }
 }

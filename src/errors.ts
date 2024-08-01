@@ -24,3 +24,19 @@ export class CreateSessionError extends Error {
     this.name = 'CreateSessionError';
   }
 }
+
+export class WindowSizeTypeError extends Error {
+  constructor() {
+    super('Invalid resize value type: width and height must be numbers.');
+    this.name = 'WindowSizeTypeError';
+  }
+}
+
+export class WindowSizeRangeError extends Error {
+  constructor() {
+    super(
+      'Invalid resize value: width and height must be within the range of 0 to 2^31 - 1.',
+    );
+    this.name = 'WindowSizeRangeError';
+  }
+}
