@@ -9,7 +9,7 @@ type Version = string;
 type Os = string;
 
 // Maximum window size in pixels.
-export const maxWindowSize = 2 ** 31 - 1;
+const maxWindowSize = 2 ** 31 - 1;
 
 let sauceDriver: SauceDriver;
 
