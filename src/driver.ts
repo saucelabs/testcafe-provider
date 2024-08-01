@@ -97,7 +97,7 @@ export class SauceDriver {
   }
 
   /**
-   * getNewWindowSize calculates the required browser window size to accommodate the requested viewport size.
+   * Calculates the required browser window size to accommodate the requested viewport size.
    * @param newViewport - The requested viewport size.
    * @param viewport - The current size of the viewport.
    * @param windowSize - The current size of the browser window, including its utility area.
