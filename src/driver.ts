@@ -141,7 +141,7 @@ export class SauceDriver {
     );
   }
 
-  async saveScreenshot(browserId: string, filepath: string) {
+  async takeScreenshot(browserId: string, filepath: string) {
     const browser = this.sessions.get(browserId);
     if (!browser) {
       return;

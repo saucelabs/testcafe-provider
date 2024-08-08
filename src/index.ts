@@ -231,7 +231,18 @@ module.exports = {
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L134
    */
-  async takeScreenshot(browserId: string, screenshotPath: string) {
-    await sauceDriver.saveScreenshot(browserId, screenshotPath);
+  async takeScreenshot(
+    browserId: string,
+    screenshotPath: string,
+    pageWidth: number,
+    pageHeight: number,
+    fullPage: boolean,
+  ) {
+    if (fullPage) {
+      console.warn(
+        'Taking a full-page screenshot on the remote browser is not supported.',
+      );
+    }
+    await sauceDriver.takeScreenshot(browserId, screenshotPath);
   },
 };
