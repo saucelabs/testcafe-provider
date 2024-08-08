@@ -1,8 +1,8 @@
-import { SauceDriver } from './driver.js';
+import { SauceDriver } from './driver';
 import { AuthError, TunnelNameError, WindowSizeRangeError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
-import { isDevice } from './device.js';
+import { isDevice } from './device';
 
 type Browser = string;
 type Version = string;
@@ -231,9 +231,7 @@ module.exports = {
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L134
    */
-  async takeScreenshot(/* id, screenshotPath, pageWidth, pageHeight */) {
-    this.reportWarning(
-      'The screenshot functionality is not supported by the Sauce Labs browser provider plugin.',
-    );
+  async takeScreenshot(browserId: string, screenshotPath: string) {
+    await sauceDriver.saveScreenshot(browserId, screenshotPath);
   },
 };
