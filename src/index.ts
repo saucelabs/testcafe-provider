@@ -230,6 +230,14 @@ module.exports = {
    * Called by TestCafe to take a screenshot.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L134
+   *
+   * @param {string} browserId - The ID of the browser session.
+   * @param {string} screenshotPath - The absolute path with .png extension where the screenshot will be saved.
+   *                                  It also supports path pattern.
+   * @param {number} pageWidth - The width of the page to capture, currently no use.
+   * @param {number} pageHeight - The height of the page to capture, currently no use.
+   * @param {boolean} fullPage - A flag indicating whether to capture a full-page screenshot.
+   *                             Currently, full-page screenshots are not supported.
    */
   async takeScreenshot(
     browserId: string,
