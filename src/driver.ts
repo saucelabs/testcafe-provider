@@ -1,4 +1,5 @@
 import wd, { Client } from 'webdriver';
+import * as fs from 'fs';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
 
@@ -138,5 +139,14 @@ export class SauceDriver {
       newWindowSize.width,
       newWindowSize.height,
     );
+  }
+
+  async takeScreenshot(browserId: string, filepath: string) {
+    const browser = this.sessions.get(browserId);
+    if (!browser) {
+      return;
+    }
+    const screenBuffer = await browser.takeScreenshot();
+    fs.writeFileSync(filepath, Buffer.from(screenBuffer, 'base64'));
   }
 }

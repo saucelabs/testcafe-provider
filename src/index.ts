@@ -1,8 +1,8 @@
-import { SauceDriver } from './driver.js';
+import { SauceDriver } from './driver';
 import { AuthError, TunnelNameError, WindowSizeRangeError } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
-import { isDevice } from './device.js';
+import { isDevice } from './device';
 
 type Browser = string;
 type Version = string;
@@ -230,10 +230,27 @@ module.exports = {
    * Called by TestCafe to take a screenshot.
    *
    * https://github.com/DevExpress/testcafe/blob/4a30f1c3b8769ca68c9b7912911f1dd8aa91d62c/src/browser/provider/plugin-host.js#L134
+   *
+   * @param {string} browserId - The ID of the browser session.
+   * @param {string} screenshotPath - The absolute path with .png extension where the screenshot will be saved.
+   *                                  It also supports path pattern.
+   * @param {number} pageWidth - The width of the page to capture, currently no use.
+   * @param {number} pageHeight - The height of the page to capture, currently no use.
+   * @param {boolean} fullPage - A flag indicating whether to capture a full-page screenshot.
+   *                             Currently, full-page screenshots are not supported.
    */
-  async takeScreenshot(/* id, screenshotPath, pageWidth, pageHeight */) {
-    this.reportWarning(
-      'The screenshot functionality is not supported by the Sauce Labs browser provider plugin.',
-    );
+  async takeScreenshot(
+    browserId: string,
+    screenshotPath: string,
+    pageWidth: number,
+    pageHeight: number,
+    fullPage: boolean,
+  ) {
+    if (fullPage) {
+      console.warn(
+        'Taking a full-page screenshot on the remote browser is not supported.',
+      );
+    }
+    await sauceDriver.takeScreenshot(browserId, screenshotPath);
   },
 };
