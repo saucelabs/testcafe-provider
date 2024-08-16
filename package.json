@@ -13,7 +13,12 @@
     "lint": "prettier --check '**/*.{js,ts,mjs,cjs}' && eslint .",
     "fmt": "prettier --write '**/*.{js,ts,mjs,cjs}'",
     "link": "npm link && npm link testcafe-browser-provider-sauce",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "tsc && release-it --github.release",
+    "release:ci": "npm run release -- --ci --no-git.requireCleanWorkingDir",
+    "release:patch": "npm run release -- patch",
+    "release:minor": "npm run release -- minor",
+    "release:major": "npm run release -- major"
   },
   "keywords": [
     "testcafe",
@@ -29,6 +34,7 @@
     "husky": "9.0.11",
     "prettier": "3.2.5",
     "pretty-quick": "4.0.0",
+    "release-it": "^17.6.0",
     "rimraf": "5.0.5",
     "typescript": "5.3.3",
     "typescript-eslint": "7.2.0"
