@@ -48,6 +48,7 @@ module.exports = {
     const build = process.env.SAUCE_BUILD;
     const tags = (process.env.SAUCE_TAGS || '').split(',');
     const region = process.env.SAUCE_REGION || 'us-west-1';
+    const jobName = process.env.SAUCE_JOB_NAME;
 
     if (!username || !accessKey) {
       throw new AuthError();
@@ -68,6 +69,7 @@ module.exports = {
       accessKey,
       region,
       tunnelName,
+      jobName,
       build,
       tags,
     );

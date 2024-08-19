@@ -24,12 +24,14 @@ export class SauceDriver {
   private readonly build: string;
   private readonly tags: string[];
   private readonly region: Region;
+  private readonly jobName?: string;
 
   constructor(
     username: string,
     accessKey: string,
     region: Region,
     tunnelName: string,
+    jobName?: string,
     build?: string,
     tags?: string[],
   ) {
@@ -37,6 +39,7 @@ export class SauceDriver {
     this.accessKey = accessKey;
     this.region = region;
     this.tunnelName = tunnelName;
+    this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
     this.tags = tags ?? [];
   }
@@ -47,7 +50,9 @@ export class SauceDriver {
     platformName: string,
   ): WebDriver.Capabilities {
     const sauceOpts = {
-      name: `TestCafe via ${browserName}@${browserVersion} on ${platformName}`,
+      name:
+        this.jobName ??
+        `TestCafe via ${browserName}@${browserVersion} on ${platformName}`,
       build: this.build,
       tags: this.tags,
       tunnelIdentifier: this.tunnelName,
