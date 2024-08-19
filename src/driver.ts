@@ -113,8 +113,6 @@ export class SauceDriver {
 
     this.sessions.set(browserId, webDriver);
 
-    // TODO do we need a keep-alive?
-
     await webDriver.navigateTo(url);
 
     return {
