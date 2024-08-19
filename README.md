@@ -54,11 +54,11 @@ Mandatory environment variables:
 
 Optional environment variables:
 
-- `SAUCE_JOB_NAME` - All jobs will be named with this value instead.
-- `SAUCE_BUILD` - All jobs will be associated with this build.
-- `SAUCE_TAGS` - All jobs will be tagged. Separate tags with commas.
+- `SAUCE_JOB_NAME` - Specify the job name for all jobs. Defaults to `TestCafe via ${browserName}@${browserVersion} on ${platformName}`.
+- `SAUCE_BUILD` - All jobs will be associated with this build. The default value is randomly generated.
+- `SAUCE_TAGS` - A comma separated list of tags to apply to all jobs.
 - `SAUCE_REGION` - The Sauce Labs region. Valid values are `us-west-1` (default) or `eu-central-1`.
-- `SAUCE_SCREEN_RESOLUTION` - The screen resolution. The format is `1920x1080`.
+- `SAUCE_SCREEN_RESOLUTION` - The desktop browser screen resolution (not applicable to mobile). The format is `1920x1080`.
 
 ## Development
 
