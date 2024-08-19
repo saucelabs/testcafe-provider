@@ -169,6 +169,7 @@ module.exports = {
       bName,
       bVersion,
       os,
+      process.env.SAUCE_SCREEN_RESOLUTION,
     );
     console.log('Browser started.');
 

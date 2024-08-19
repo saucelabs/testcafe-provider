@@ -41,13 +41,14 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
     this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
-    this.tags = tags ?? [];
+    this.tags = tags ?? []; // FIXME use undefined instead
   }
 
   createCapabilities(
     browserName: string,
     browserVersion: string,
     platformName: string,
+    screenResolution?: string,
   ): WebDriver.Capabilities {
     const sauceOpts = {
       name:
@@ -56,6 +57,7 @@ export class SauceDriver {
       build: this.build,
       tags: this.tags,
       tunnelIdentifier: this.tunnelName,
+      screenResolution: screenResolution,
       idleTimeout: 3600, // 1 hour
       enableTestReport: true,
     };
@@ -86,6 +88,7 @@ export class SauceDriver {
     browserName: string,
     browserVersion: string,
     platformName: string,
+    screenResolution?: string,
   ) {
     const webDriver = await wd.newSession({
       protocol: 'https',
@@ -97,6 +100,7 @@ export class SauceDriver {
         browserName,
         browserVersion,
         platformName,
+        screenResolution,
       ),
       logLevel: 'error',
       connectionRetryTimeout: 9 * 60 * 1000, // 9 minutes
