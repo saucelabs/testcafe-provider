@@ -47,7 +47,7 @@ export class SauceDriver {
     platformName: string,
   ): WebDriver.Capabilities {
     const sauceOpts = {
-      name: 'testcafe sauce provider job', // TODO make this configurable
+      name: `TestCafe via ${browserName}@${browserVersion} on ${platformName}`,
       build: this.build,
       tags: this.tags,
       tunnelIdentifier: this.tunnelName,
