@@ -12,6 +12,7 @@
     "build": "rimraf ./lib && tsc",
     "lint": "prettier --check '**/*.{js,ts,mjs,cjs}' && eslint .",
     "fmt": "prettier --write '**/*.{js,ts,mjs,cjs}'",
+    "test": "testcafe 'sauce:chrome@latest:Windows 11' tests/e2e",
     "link": "npm link && npm link testcafe-browser-provider-sauce",
     "prepare": "husky",
     "release": "tsc && release-it --github.release",

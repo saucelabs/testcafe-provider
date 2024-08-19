@@ -28,5 +28,15 @@ jobs:
 
       - name: Lint
         run: npm run lint
-#      - name: Test
-#        run: npm run test
+
+      - name: Start Tunnel
+        uses: saucelabs/sauce-connect-action@v2
+        with:
+          username: ${{ secrets.SAUCE_USERNAME }}
+          accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+          tunnelName: testcafe-provider
+
+      - name: Test
+        run: |
+          npm run link
+          npm run test
