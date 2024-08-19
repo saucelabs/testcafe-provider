@@ -13,7 +13,7 @@ export class SauceDriver {
   private readonly accessKey: string;
   private readonly tunnelName: string;
   private sessions = new Map<string, Client>();
-  private readonly build;
+  private readonly build: string;
 
   constructor(
     username: string,
