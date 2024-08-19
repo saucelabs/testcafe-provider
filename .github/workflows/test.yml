@@ -37,6 +37,10 @@ jobs:
           tunnelName: testcafe-provider
 
       - name: Test
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          SAUCE_TUNNEL_NAME: testcafe-provider
         run: |
           npm run link
           npm run test
