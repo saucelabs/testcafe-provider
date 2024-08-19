@@ -14,17 +14,20 @@ export class SauceDriver {
   private readonly tunnelName: string;
   private sessions = new Map<string, Client>();
   private readonly build: string;
+  private readonly tags: string[];
 
   constructor(
     username: string,
     accessKey: string,
     tunnelName: string,
     build?: string,
+    tags?: string[],
   ) {
     this.username = username;
     this.accessKey = accessKey;
     this.tunnelName = tunnelName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
+    this.tags = tags ?? [];
   }
 
   createCapabilities(
@@ -35,6 +38,7 @@ export class SauceDriver {
     const sauceOpts = {
       name: 'testcafe sauce provider job', // TODO make this configurable
       build: this.build,
+      tags: this.tags,
       tunnelIdentifier: this.tunnelName,
       idleTimeout: 3600, // 1 hour
       enableTestReport: true,
