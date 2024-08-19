@@ -8,6 +8,14 @@ export type Size = {
   height: number;
 };
 
+export type Region = 'us-west-1' | 'eu-central-1' | 'staging';
+
+const hostByRegion = new Map<Region, string>([
+  ['us-west-1', 'ondemand.us-west-1.saucelabs.com'],
+  ['eu-central-1', 'ondemand.eu-central-1.saucelabs.com'],
+  ['staging', 'ondemand.staging.saucelabs.net'],
+]);
+
 export class SauceDriver {
   private readonly username: string;
   private readonly accessKey: string;
@@ -15,16 +23,19 @@ export class SauceDriver {
   private sessions = new Map<string, Client>();
   private readonly build: string;
   private readonly tags: string[];
+  private readonly region: Region;
 
   constructor(
     username: string,
     accessKey: string,
+    region: Region,
     tunnelName: string,
     build?: string,
     tags?: string[],
   ) {
     this.username = username;
     this.accessKey = accessKey;
+    this.region = region;
     this.tunnelName = tunnelName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
     this.tags = tags ?? [];
@@ -73,7 +84,7 @@ export class SauceDriver {
   ) {
     const webDriver = await wd.newSession({
       protocol: 'https',
-      hostname: `ondemand.us-west-1.saucelabs.com`, // TODO multi region support
+      hostname: hostByRegion.get(this.region),
       port: 443,
       user: this.username,
       key: this.accessKey,
