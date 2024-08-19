@@ -1,5 +1,10 @@
 import { SauceDriver } from './driver';
-import { AuthError, TunnelNameError, WindowSizeRangeError } from './errors';
+import {
+  AuthError,
+  InvalidRegionError,
+  TunnelNameError,
+  WindowSizeRangeError,
+} from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device';
@@ -40,6 +45,10 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnelName = process.env.SAUCE_TUNNEL_NAME;
+    const build = process.env.SAUCE_BUILD;
+    const tags = (process.env.SAUCE_TAGS || '').split(',');
+    const region = process.env.SAUCE_REGION || 'us-west-1';
+    const jobName = process.env.SAUCE_JOB_NAME;
 
     if (!username || !accessKey) {
       throw new AuthError();
@@ -47,8 +56,23 @@ module.exports = {
     if (!tunnelName) {
       throw new TunnelNameError();
     }
+    if (
+      region !== 'us-west-1' &&
+      region !== 'eu-central-1' &&
+      region !== 'staging'
+    ) {
+      throw new InvalidRegionError();
+    }
 
-    sauceDriver = new SauceDriver(username, accessKey, tunnelName);
+    sauceDriver = new SauceDriver(
+      username,
+      accessKey,
+      region,
+      tunnelName,
+      jobName,
+      build,
+      tags,
+    );
 
     const resp = await getPlatforms({ username, accessKey });
     const browserMap = new Map<Browser, Map<Version, Set<Os>>>();
@@ -145,6 +169,7 @@ module.exports = {
       bName,
       bVersion,
       os,
+      process.env.SAUCE_SCREEN_RESOLUTION,
     );
     console.log('Browser started.');
 

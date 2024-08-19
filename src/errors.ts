@@ -33,3 +33,12 @@ export class WindowSizeRangeError extends Error {
     this.name = 'WindowSizeRangeError';
   }
 }
+
+export class InvalidRegionError extends Error {
+  constructor() {
+    super(
+      'Invalid region. The region must be one of the following: us-west-1, eu-central-1.',
+    );
+    this.name = 'InvalidRegionError';
+  }
+}
