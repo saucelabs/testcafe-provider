@@ -22,7 +22,7 @@ export class SauceDriver {
   private readonly tunnelName: string;
   private sessions = new Map<string, Client>();
   private readonly build: string;
-  private readonly tags: string[];
+  private readonly tags?: string[];
   private readonly region: Region;
   private readonly jobName?: string;
 
@@ -41,7 +41,7 @@ export class SauceDriver {
     this.tunnelName = tunnelName;
     this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
-    this.tags = tags ?? []; // FIXME use undefined instead
+    this.tags = tags;
   }
 
   createCapabilities(
