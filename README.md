@@ -19,7 +19,7 @@ testcafe -b sauce
 When you run tests from the command line, use the alias when specifying browsers:
 
 ```
-testcafe sauce:chrome 'path/to/test/file.js'
+testcafe "sauce:chrome@latest:Windows 11" 'path/to/test/file.js'
 ```
 
 When you use API, pass the alias to the `browsers()` method:
@@ -28,7 +28,7 @@ When you use API, pass the alias to the `browsers()` method:
 testCafe
   .createRunner()
   .src('path/to/test/file.js')
-  .browsers('sauce:chrome')
+  .browsers('sauce:chrome@latest:Windows 11')
   .run();
 ```
 
