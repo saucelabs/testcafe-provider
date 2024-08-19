@@ -40,6 +40,7 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnelName = process.env.SAUCE_TUNNEL_NAME;
+    const build = process.env.SAUCE_BUILD;
 
     if (!username || !accessKey) {
       throw new AuthError();
@@ -48,7 +49,7 @@ module.exports = {
       throw new TunnelNameError();
     }
 
-    sauceDriver = new SauceDriver(username, accessKey, tunnelName);
+    sauceDriver = new SauceDriver(username, accessKey, tunnelName, build);
 
     const resp = await getPlatforms({ username, accessKey });
     const browserMap = new Map<Browser, Map<Version, Set<Os>>>();

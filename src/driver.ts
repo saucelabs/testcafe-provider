@@ -13,11 +13,18 @@ export class SauceDriver {
   private readonly accessKey: string;
   private readonly tunnelName: string;
   private sessions = new Map<string, Client>();
+  private readonly build;
 
-  constructor(username: string, accessKey: string, tunnelName: string) {
+  constructor(
+    username: string,
+    accessKey: string,
+    tunnelName: string,
+    build?: string,
+  ) {
     this.username = username;
     this.accessKey = accessKey;
     this.tunnelName = tunnelName;
+    this.build = build ?? Math.random().toString(36).substring(2, 10);
   }
 
   createCapabilities(
@@ -27,7 +34,7 @@ export class SauceDriver {
   ): WebDriver.Capabilities {
     const sauceOpts = {
       name: 'testcafe sauce provider job', // TODO make this configurable
-      build: this.getBuild(),
+      build: this.build,
       tunnelIdentifier: this.tunnelName,
       idleTimeout: 3600, // 1 hour
       enableTestReport: true,
@@ -148,20 +155,5 @@ export class SauceDriver {
     }
     const screenBuffer = await browser.takeScreenshot();
     fs.writeFileSync(filepath, Buffer.from(screenBuffer, 'base64'));
-  }
-
-  /**
-   * Return the build name for the current test run. This is used to group test
-   * runs in the Sauce Labs dashboard. The build name is determined by the
-   * environment variable SAUCE_BUILD, if set, otherwise it'll be auto generated.
-   */
-  private getBuild() {
-    const build = process.env.SAUCE_BUILD;
-    if (build) {
-      return build;
-    }
-
-    // generate 8 character alphanumeric string
-    return Math.random().toString(36).substring(2, 10);
   }
 }
