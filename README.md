@@ -51,6 +51,8 @@ Our reporter will automatically detect if TestCafe is running remote browser
 sessions on Sauce Labs and attach test results to the corresponding Sauce Labs
 job.
 
+![test_cases.webp](assets/test_cases.avif)
+
 _Note: The build name and tags as defined by the provider plugin take precedence
 over those defined by the reporter._
 
