@@ -10,7 +10,7 @@
 To test a locally built version of the plugin, link the plugin to itself before
 running tests:
 
-```
+```shell
 npm run link
 npm run build
 npm run test
