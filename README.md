@@ -51,8 +51,8 @@ Our reporter will automatically detect if TestCafe is running remote browser
 sessions on Sauce Labs and attach test results to the corresponding Sauce Labs
 job.
 
-_Note: The build name and tags as defined by this plugin take precedence over
-those defined by the reporter._
+_Note: The build name and tags as defined by the provider plugin take precedence
+over those defined by the reporter._
 
 ```shell
 testcafe "sauce:chrome@latest:Windows 11" path/to/test/file.js --reporter saucelabs
