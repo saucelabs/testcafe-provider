@@ -4,7 +4,7 @@ This is the official Sauce Labs browser provider plugin for [TestCafe](http://de
 
 ## Install
 
-```
+```shell
 npm install testcafe-browser-provider-sauce
 ```
 
@@ -22,14 +22,14 @@ the tunnel name using the `SAUCE_TUNNEL_NAME` environment variable.
 
 You can determine the available browser aliases by running
 
-```
+```shell
 testcafe -b sauce
 ```
 
 When you run tests from the command line, use the alias when specifying browsers:
 
-```
-testcafe "sauce:chrome@latest:Windows 11" 'path/to/test/file.js'
+```shell
+testcafe "sauce:chrome@latest:Windows 11" path/to/test/file.js
 ```
 
 When you use API, pass the alias to the `browsers()` method:
@@ -40,6 +40,24 @@ testCafe
   .src('path/to/test/file.js')
   .browsers('sauce:chrome@latest:Windows 11')
   .run();
+```
+
+## Enhanced Reporting
+
+This plugin can be further enhanced when used in conjunction with
+[testcafe-reporter-saucelabs](https://github.com/saucelabs/testcafe-reporter).
+
+Our reporter will automatically detect if TestCafe is running remote browser
+sessions on Sauce Labs and attach test results to the corresponding Sauce Labs
+job.
+
+![test_cases.webp](assets/test_cases.avif)
+
+_Note: The build name and tags as defined by the provider plugin take precedence
+over those defined by the reporter._
+
+```shell
+testcafe "sauce:chrome@latest:Windows 11" path/to/test/file.js --reporter saucelabs
 ```
 
 ## Configuration
@@ -59,11 +77,3 @@ Optional environment variables:
 - `SAUCE_TAGS` - A comma separated list of tags to apply to all jobs.
 - `SAUCE_REGION` - The Sauce Labs region. Valid values are `us-west-1` (default) or `eu-central-1`.
 - `SAUCE_SCREEN_RESOLUTION` - The desktop browser screen resolution (not applicable to mobile). The format is `1920x1080`.
-
-## Development
-
-To use the local version of the plugin, you can link the package:
-
-```
-npm run link
-```
