@@ -56,7 +56,7 @@ export class SauceDriver {
         `TestCafe via ${browserName}@${browserVersion} on ${platformName}`,
       build: this.build,
       tags: this.tags,
-      tunnelIdentifier: this.tunnelName,
+      tunnelName: this.tunnelName,
       screenResolution: screenResolution,
       idleTimeout: 3600, // 1 hour
       enableTestReport: true,
