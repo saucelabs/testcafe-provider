@@ -2,6 +2,10 @@
 
 This is the official Sauce Labs browser provider plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
+:construction: This plugin is currently in beta. We caution against using it in
+production pipelines. We _do_ seek feedback and encourage you to report any
+issues you encounter.
+
 ## Install
 
 ```shell
