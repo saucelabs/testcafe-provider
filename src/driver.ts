@@ -2,6 +2,7 @@ import wd, { Client } from 'webdriver';
 import * as fs from 'fs';
 import { isDevice, isSimulator } from './device';
 import { CreateSessionError } from './errors';
+import path from 'path';
 
 export type Size = {
   width: number;
@@ -25,6 +26,7 @@ export class SauceDriver {
   private readonly tags?: string[];
   private readonly region: Region;
   private readonly jobName?: string;
+  private readonly user_agent: string;
 
   constructor(
     username: string,
@@ -42,6 +44,20 @@ export class SauceDriver {
     this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
     this.tags = tags;
+    this.user_agent = this.getUserAgent();
+  }
+
+  getUserAgent() {
+    try {
+      const packageData = JSON.parse(
+        fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8'),
+      );
+      return 'testcafe-browser-provider-sauce/' + packageData.version;
+    } catch (e) {
+      /* empty */
+    }
+
+    return 'testcafe-browser-provider-sauce/unknown';
   }
 
   createCapabilities(
@@ -91,6 +107,9 @@ export class SauceDriver {
     screenResolution?: string,
   ) {
     const webDriver = await wd.newSession({
+      headers: {
+        'User-Agent': this.user_agent,
+      },
       protocol: 'https',
       hostname: hostByRegion.get(this.region),
       port: 443,
