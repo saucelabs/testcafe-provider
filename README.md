@@ -82,4 +82,4 @@ Optional environment variables:
 - `SAUCE_REGION` - The Sauce Labs region. Valid values are `us-west-1` (default) or `eu-central-1`.
 - `SAUCE_SCREEN_RESOLUTION` - The desktop browser screen resolution (not applicable to mobile). The format is `1920x1080`.
 - `SAUCE_TUNNEL_WAIT_SEC` - The amount of time to wait, in seconds, for
-  the tunnel defined by `SAUCE_TUNNEL_NAME` to be ready. Default is "60".
+  the tunnel defined by `SAUCE_TUNNEL_NAME` to be ready. Default is "30".
