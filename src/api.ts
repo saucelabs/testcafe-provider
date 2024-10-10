@@ -29,6 +29,13 @@ export interface Platform {
   os: string;
 }
 
+export interface Tunnel {
+  id: string;
+  owner: string;
+  status: string;
+  tunnel_identifier: string;
+}
+
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -45,4 +52,30 @@ export async function getPlatforms(params: {
   );
 
   return resp;
+}
+
+export async function getTunnels(params: {
+  username: string;
+  accessKey: string;
+  region: string;
+  filter: string;
+}) {
+  const { username, accessKey, region, filter } = params;
+  // TODO: Error handling?
+  const resp = await axios.get<{ [key: string]: Tunnel[] }>(
+    `https://api.${region}.saucelabs.com/rest/v1/${username}/tunnels`,
+    {
+      auth: {
+        username,
+        password: accessKey,
+      },
+      params: {
+        full: true,
+        all: true,
+        filter: filter !== '' ? filter : undefined,
+      },
+    },
+  );
+
+  return resp.data;
 }
