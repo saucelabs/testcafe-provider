@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 
 export interface Platform {
   /**
@@ -29,6 +29,18 @@ export interface Platform {
   os: string;
 }
 
+export interface Tunnel {
+  id: string;
+  owner: string;
+  status: string;
+  tunnel_identifier: string;
+}
+
+export type ApiResult<T, E> =
+  | { kind: 'ok'; data: T }
+  | { kind: 'err'; error: E }
+  | { kind: 'unauthorized' };
+
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -45,4 +57,52 @@ export async function getPlatforms(params: {
   );
 
   return resp;
+}
+
+export async function getTunnels(params: {
+  username: string;
+  accessKey: string;
+  region: string;
+  filter: string;
+}): Promise<ApiResult<{ [key: string]: Tunnel[] }, Error>> {
+  const { username, accessKey, region, filter } = params;
+  try {
+    const resp = await axios.get<{ [key: string]: Tunnel[] }>(
+      `https://api.${region}.saucelabs.com/rest/v1/${username}/tunnels`,
+      {
+        auth: {
+          username,
+          password: accessKey,
+        },
+        params: {
+          full: true,
+          all: true,
+          filter: filter !== '' ? filter : undefined,
+        },
+      },
+    );
+
+    return {
+      kind: 'ok',
+      data: resp.data,
+    };
+  } catch (e) {
+    if (isAxiosError(e)) {
+      if (e.response?.status === 401) {
+        return {
+          kind: 'unauthorized',
+        };
+      }
+      return {
+        kind: 'err',
+        error: new Error(
+          `unexpected response (${e.status}) fetching tunnels: ${e.message}`,
+        ),
+      };
+    }
+    return {
+      kind: 'err',
+      error: new Error(`unknown error fetching tunnels: ${e}`),
+    };
+  }
 }

@@ -3,11 +3,13 @@ import {
   AuthError,
   InvalidRegionError,
   TunnelNameError,
+  TunnelNotReadyError,
   WindowSizeRangeError,
 } from './errors';
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device';
+import { waitForTunnel } from './tunnel';
 
 type Browser = string;
 type Version = string;
@@ -45,6 +47,7 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnelName = process.env.SAUCE_TUNNEL_NAME;
+    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_SEC) || 30;
     const build = process.env.SAUCE_BUILD;
     const tags = (process.env.SAUCE_TAGS || '').split(',');
     const region = process.env.SAUCE_REGION || 'us-west-1';
@@ -63,6 +66,23 @@ module.exports = {
     ) {
       throw new InvalidRegionError();
     }
+
+    console.log(
+      `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready...`,
+    );
+    const tunnelStatus = await waitForTunnel(
+      username,
+      accessKey,
+      region,
+      tunnelName,
+      tunnelWait,
+    );
+    if (tunnelStatus === 'notready') {
+      throw new TunnelNotReadyError();
+    } else if (tunnelStatus === 'unauthorized') {
+      throw new AuthError();
+    }
+    console.log('Tunnel is ready');
 
     sauceDriver = new SauceDriver(
       username,

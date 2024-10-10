@@ -18,6 +18,13 @@ export class TunnelNameError extends Error {
   }
 }
 
+export class TunnelNotReadyError extends Error {
+  constructor() {
+    super('Timed out waiting for a tunnel to be ready.');
+    this.name = 'TunnelNotReadyError';
+  }
+}
+
 export class CreateSessionError extends Error {
   constructor() {
     super('Failed to run test on Sauce Labs: no session id returned');
