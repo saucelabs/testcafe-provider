@@ -96,7 +96,7 @@ export async function getTunnels(params: {
     }
     return {
       kind: 'err',
-      data: new Error(`unknown error fetching tunnel status: ${e}`),
+      data: new Error(`unknown error fetching tunnels: ${e}`),
     };
   }
 }
