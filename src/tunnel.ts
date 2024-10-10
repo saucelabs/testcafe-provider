@@ -44,7 +44,7 @@ export async function isTunnelRunning(
       }
     })(),
     (async function (): Promise<boolean> {
-      await sleep(wait);
+      await sleep(wait * 1000);
       return false;
     })(),
   ]);

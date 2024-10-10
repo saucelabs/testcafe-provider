@@ -47,7 +47,7 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnelName = process.env.SAUCE_TUNNEL_NAME;
-    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_MS) || 60 * 1000;
+    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_SEC) || 60;
     const build = process.env.SAUCE_BUILD;
     const tags = (process.env.SAUCE_TAGS || '').split(',');
     const region = process.env.SAUCE_REGION || 'us-west-1';
@@ -67,7 +67,9 @@ module.exports = {
       throw new InvalidRegionError();
     }
 
-    console.log(`Waiting ${tunnelWait}ms for tunnel ${tunnelName} to be ready`);
+    console.log(
+      `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready`,
+    );
     const validTunnel = await isTunnelRunning(
       username,
       accessKey,
