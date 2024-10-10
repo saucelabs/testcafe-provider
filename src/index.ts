@@ -8,6 +8,7 @@ import {
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device';
+import { isTunnelRunning } from './tunnel';
 
 type Browser = string;
 type Version = string;
@@ -49,6 +50,7 @@ module.exports = {
     const tags = (process.env.SAUCE_TAGS || '').split(',');
     const region = process.env.SAUCE_REGION || 'us-west-1';
     const jobName = process.env.SAUCE_JOB_NAME;
+    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_TIME) || 60 * 1000;
 
     if (!username || !accessKey) {
       throw new AuthError();
@@ -63,6 +65,19 @@ module.exports = {
     ) {
       throw new InvalidRegionError();
     }
+
+    console.log(`Waiting ${tunnelWait}ms for tunnel ${tunnelName} to be ready`);
+    const validTunnel = await isTunnelRunning(
+      username,
+      accessKey,
+      region,
+      tunnelName,
+      tunnelWait,
+    );
+    if (!validTunnel) {
+      throw new Error('Waited but tunnel did not become available');
+    }
+    console.log('Tunnel is ready');
 
     sauceDriver = new SauceDriver(
       username,
