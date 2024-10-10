@@ -3,6 +3,7 @@ import {
   AuthError,
   InvalidRegionError,
   TunnelNameError,
+  TunnelNotReadyError,
   WindowSizeRangeError,
 } from './errors';
 import { getPlatforms } from './api';
@@ -46,11 +47,11 @@ module.exports = {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnelName = process.env.SAUCE_TUNNEL_NAME;
+    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_MS) || 60 * 1000;
     const build = process.env.SAUCE_BUILD;
     const tags = (process.env.SAUCE_TAGS || '').split(',');
     const region = process.env.SAUCE_REGION || 'us-west-1';
     const jobName = process.env.SAUCE_JOB_NAME;
-    const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_TIME) || 60 * 1000;
 
     if (!username || !accessKey) {
       throw new AuthError();
@@ -75,7 +76,7 @@ module.exports = {
       tunnelWait,
     );
     if (!validTunnel) {
-      throw new Error('Waited but tunnel did not become available');
+      throw new TunnelNotReadyError();
     }
     console.log('Tunnel is ready');
 
