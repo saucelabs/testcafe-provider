@@ -4,15 +4,15 @@ async function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export async function isTunnelRunning(
+export async function waitForTunnel(
   username: string,
   accessKey: string,
   region: string,
   tunnelName: string,
   wait: number,
-): Promise<boolean> {
+): Promise<'ok' | 'notready' | 'unauthorized'> {
   return await Promise.race([
-    (async function (): Promise<boolean> {
+    (async function (): Promise<'ok' | 'unauthorized'> {
       // eslint-disable-next-line no-constant-condition
       while (true) {
         const result = await getTunnels({
@@ -21,6 +21,9 @@ export async function isTunnelRunning(
           region,
           filter: tunnelName,
         });
+        if (result.kind === 'unauthorized') {
+          return 'unauthorized';
+        }
         if (result.kind !== 'ok') {
           await sleep(2000);
           continue;
@@ -37,15 +40,15 @@ export async function isTunnelRunning(
                 t.status === 'running',
             )
           ) {
-            return true;
+            return 'ok';
           }
         }
         await sleep(1000);
       }
     })(),
-    (async function (): Promise<boolean> {
+    (async function (): Promise<'notready'> {
       await sleep(wait * 1000);
-      return false;
+      return 'notready';
     })(),
   ]);
 }

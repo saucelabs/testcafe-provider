@@ -38,7 +38,8 @@ export interface Tunnel {
 
 export type ApiResult<T, E> =
   | { kind: 'ok'; data: T }
-  | { kind: 'err'; error: E };
+  | { kind: 'err'; error: E }
+  | { kind: 'unauthorized' };
 
 export async function getPlatforms(params: {
   username: string;
@@ -87,6 +88,11 @@ export async function getTunnels(params: {
     };
   } catch (e) {
     if (isAxiosError(e)) {
+      if (e.response?.status === 401) {
+        return {
+          kind: 'unauthorized',
+        };
+      }
       return {
         kind: 'err',
         error: new Error(

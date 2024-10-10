@@ -9,7 +9,7 @@ import {
 import { getPlatforms } from './api';
 import { rcompareOses, rcompareVersions } from './sort';
 import { isDevice } from './device';
-import { isTunnelRunning } from './tunnel';
+import { waitForTunnel } from './tunnel';
 
 type Browser = string;
 type Version = string;
@@ -70,15 +70,17 @@ module.exports = {
     console.log(
       `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready`,
     );
-    const validTunnel = await isTunnelRunning(
+    const tunnelStatus = await waitForTunnel(
       username,
       accessKey,
       region,
       tunnelName,
       tunnelWait,
     );
-    if (!validTunnel) {
+    if (tunnelStatus === 'notready') {
       throw new TunnelNotReadyError();
+    } else if (tunnelStatus === 'unauthorized') {
+      throw new AuthError();
     }
     console.log('Tunnel is ready');
 
