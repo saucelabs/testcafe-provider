@@ -22,7 +22,7 @@ export async function isTunnelRunning(
           filter: tunnelName,
         });
         if (result.kind !== 'ok') {
-          await sleep(1000);
+          await sleep(2000);
           continue;
         }
 
