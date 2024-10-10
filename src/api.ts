@@ -38,7 +38,7 @@ export interface Tunnel {
 
 export type ApiResult<T, E> =
   | { kind: 'ok'; data: T }
-  | { kind: 'err'; data: E };
+  | { kind: 'err'; error: E };
 
 export async function getPlatforms(params: {
   username: string;
@@ -89,14 +89,14 @@ export async function getTunnels(params: {
     if (isAxiosError(e)) {
       return {
         kind: 'err',
-        data: new Error(
+        error: new Error(
           `unexpected response (${e.status}) fetching tunnels: ${e.message}`,
         ),
       };
     }
     return {
       kind: 'err',
-      data: new Error(`unknown error fetching tunnels: ${e}`),
+      error: new Error(`unknown error fetching tunnels: ${e}`),
     };
   }
 }
