@@ -68,7 +68,7 @@ module.exports = {
     }
 
     console.log(
-      `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready`,
+      `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready...`,
     );
     const tunnelStatus = await waitForTunnel(
       username,
