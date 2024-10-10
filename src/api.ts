@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 
 export interface Platform {
   /**
@@ -36,6 +36,10 @@ export interface Tunnel {
   tunnel_identifier: string;
 }
 
+export type ApiResult<T, E> =
+  | { kind: 'ok'; data: T }
+  | { kind: 'err'; data: E };
+
 export async function getPlatforms(params: {
   username: string;
   accessKey: string;
@@ -59,23 +63,40 @@ export async function getTunnels(params: {
   accessKey: string;
   region: string;
   filter: string;
-}) {
+}): Promise<ApiResult<{ [key: string]: Tunnel[] }, Error>> {
   const { username, accessKey, region, filter } = params;
-  // TODO: Error handling?
-  const resp = await axios.get<{ [key: string]: Tunnel[] }>(
-    `https://api.${region}.saucelabs.com/rest/v1/${username}/tunnels`,
-    {
-      auth: {
-        username,
-        password: accessKey,
+  try {
+    const resp = await axios.get<{ [key: string]: Tunnel[] }>(
+      `https://api.${region}.saucelabs.com/rest/v1/${username}/tunnels`,
+      {
+        auth: {
+          username,
+          password: accessKey,
+        },
+        params: {
+          full: true,
+          all: true,
+          filter: filter !== '' ? filter : undefined,
+        },
       },
-      params: {
-        full: true,
-        all: true,
-        filter: filter !== '' ? filter : undefined,
-      },
-    },
-  );
+    );
 
-  return resp.data;
+    return {
+      kind: 'ok',
+      data: resp.data,
+    };
+  } catch (e) {
+    if (isAxiosError(e)) {
+      return {
+        kind: 'err',
+        data: new Error(
+          `unexpected response (${e.status}) fetching tunnels: ${e.message}`,
+        ),
+      };
+    }
+    return {
+      kind: 'err',
+      data: new Error(`unknown error fetching tunnel status: ${e}`),
+    };
+  }
 }

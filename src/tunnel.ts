@@ -1,6 +1,6 @@
 import { getTunnels } from './api';
 
-async function timeout(delay: number) {
+async function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
@@ -15,12 +15,18 @@ export async function isTunnelRunning(
     (async function (): Promise<boolean> {
       // eslint-disable-next-line no-constant-condition
       while (true) {
-        const allTunnels = await getTunnels({
+        const result = await getTunnels({
           username,
           accessKey,
           region,
           filter: tunnelName,
         });
+        if (result.kind !== 'ok') {
+          await sleep(1000);
+          continue;
+        }
+
+        const allTunnels = result.data;
         for (const owner in allTunnels) {
           const tunnels = allTunnels[owner];
           if (
@@ -34,11 +40,11 @@ export async function isTunnelRunning(
             return true;
           }
         }
-        await timeout(1000);
+        await sleep(1000);
       }
     })(),
     (async function (): Promise<boolean> {
-      await timeout(wait);
+      await sleep(wait);
       return false;
     })(),
   ]);
