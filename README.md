@@ -71,13 +71,13 @@ testcafe "sauce:chrome@latest:Windows 11" path/to/test/file.js --reporter saucel
 
 Full overview of the available configuration options.
 
-Mandatory environment variables:
+**Mandatory** environment variables:
 
 - `SAUCE_USERNAME` - Your Sauce Labs username.
 - `SAUCE_ACCESS_KEY` - Your Sauce Labs access key.
 - `SAUCE_TUNNEL_NAME` - The Sauce Connect tunnel name.
 
-Optional environment variables:
+_Optional_ environment variables:
 
 - `SAUCE_JOB_NAME` - Specify the job name for all jobs. Defaults to `TestCafe via ${browserName}@${browserVersion} on ${platformName}`.
 - `SAUCE_BUILD` - All jobs will be associated with this build. The default value is randomly generated.
