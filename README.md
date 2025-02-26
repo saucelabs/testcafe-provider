@@ -22,6 +22,9 @@ Furthermore, a [Sauce Connect](https://docs.saucelabs.com/secure-connections/sau
 tunnel is required to run tests on Sauce Labs. After launching a tunnel, specify
 the tunnel name using the `SAUCE_TUNNEL_NAME` environment variable.
 
+**The plugin will _not_ automatically start a tunnel. It must be running before
+starting your tests.**
+
 ## Usage
 
 You can determine the available browser aliases by running
@@ -68,13 +71,14 @@ testcafe "sauce:chrome@latest:Windows 11" path/to/test/file.js --reporter saucel
 
 Full overview of the available configuration options.
 
-Mandatory environment variables:
+**Mandatory** environment variables:
 
 - `SAUCE_USERNAME` - Your Sauce Labs username.
 - `SAUCE_ACCESS_KEY` - Your Sauce Labs access key.
-- `SAUCE_TUNNEL_NAME` - The Sauce Connect tunnel name.
+- `SAUCE_TUNNEL_NAME` - The name of the already running Sauce Connect tunnel.
+  **The plugin will not start the tunnel automatically.**
 
-Optional environment variables:
+_Optional_ environment variables:
 
 - `SAUCE_JOB_NAME` - Specify the job name for all jobs. Defaults to `TestCafe via ${browserName}@${browserVersion} on ${platformName}`.
 - `SAUCE_BUILD` - All jobs will be associated with this build. The default value is randomly generated.
