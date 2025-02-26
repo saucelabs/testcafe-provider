@@ -75,7 +75,8 @@ Full overview of the available configuration options.
 
 - `SAUCE_USERNAME` - Your Sauce Labs username.
 - `SAUCE_ACCESS_KEY` - Your Sauce Labs access key.
-- `SAUCE_TUNNEL_NAME` - The Sauce Connect tunnel name.
+- `SAUCE_TUNNEL_NAME` - The name of the already running Sauce Connect tunnel.
+  **The plugin will not start the tunnel automatically.**
 
 _Optional_ environment variables:
 
