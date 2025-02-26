@@ -22,6 +22,9 @@ Furthermore, a [Sauce Connect](https://docs.saucelabs.com/secure-connections/sau
 tunnel is required to run tests on Sauce Labs. After launching a tunnel, specify
 the tunnel name using the `SAUCE_TUNNEL_NAME` environment variable.
 
+**The plugin will _not_ automatically start a tunnel. It must be running before
+starting your tests.**
+
 ## Usage
 
 You can determine the available browser aliases by running
