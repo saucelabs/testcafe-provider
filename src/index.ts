@@ -48,6 +48,7 @@ module.exports = {
     const accessKey = process.env.SAUCE_ACCESS_KEY;
     const tunnel = {
       name: process.env.SAUCE_TUNNEL_NAME || '',
+      owner: process.env.SAUCE_TUNNEL_OWNER,
     };
     const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_SEC) || 30;
     const build = process.env.SAUCE_BUILD;
