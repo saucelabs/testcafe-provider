@@ -32,7 +32,10 @@ export class SauceDriver {
     username: string,
     accessKey: string,
     region: Region,
-    tunnelName: string,
+    tunnel: {
+      name: string;
+      owner?: string;
+    },
     jobName?: string,
     build?: string,
     tags?: string[],
@@ -40,7 +43,7 @@ export class SauceDriver {
     this.username = username;
     this.accessKey = accessKey;
     this.region = region;
-    this.tunnelName = tunnelName;
+    this.tunnelName = tunnel.name;
     this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
     this.tags = tags;

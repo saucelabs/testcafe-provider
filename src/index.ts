@@ -92,7 +92,7 @@ module.exports = {
       username,
       accessKey,
       region,
-      tunnel.name,
+      tunnel,
       jobName,
       build,
       tags,
