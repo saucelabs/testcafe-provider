@@ -80,6 +80,8 @@ Full overview of the available configuration options.
 
 _Optional_ environment variables:
 
+- `SAUCE_TUNNEL_OWNER` - The optional owner of the Sauce Connect tunnel, if
+  a shared tunnel is being used.
 - `SAUCE_JOB_NAME` - Specify the job name for all jobs. Defaults to `TestCafe via ${browserName}@${browserVersion} on ${platformName}`.
 - `SAUCE_BUILD` - All jobs will be associated with this build. The default value is randomly generated.
 - `SAUCE_TAGS` - A comma separated list of tags to apply to all jobs.
