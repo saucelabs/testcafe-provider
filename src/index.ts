@@ -46,7 +46,10 @@ module.exports = {
   async init(): Promise<void> {
     const username = process.env.SAUCE_USERNAME;
     const accessKey = process.env.SAUCE_ACCESS_KEY;
-    const tunnelName = process.env.SAUCE_TUNNEL_NAME;
+    const tunnel = {
+      name: process.env.SAUCE_TUNNEL_NAME || '',
+      owner: process.env.SAUCE_TUNNEL_OWNER,
+    };
     const tunnelWait = Number(process.env.SAUCE_TUNNEL_WAIT_SEC) || 30;
     const build = process.env.SAUCE_BUILD;
     const tags = (process.env.SAUCE_TAGS || '').split(',');
@@ -56,7 +59,7 @@ module.exports = {
     if (!username || !accessKey) {
       throw new AuthError();
     }
-    if (!tunnelName) {
+    if (!tunnel.name) {
       throw new TunnelNameError();
     }
     if (
@@ -68,13 +71,14 @@ module.exports = {
     }
 
     console.log(
-      `Waiting up to ${tunnelWait}s for tunnel "${tunnelName}" to be ready...`,
+      `Waiting up to ${tunnelWait}s for tunnel "${tunnel.name}" to be ready...`,
     );
+
     const tunnelStatus = await waitForTunnel(
       username,
       accessKey,
       region,
-      tunnelName,
+      tunnel,
       tunnelWait,
     );
     if (tunnelStatus === 'notready') {
@@ -88,7 +92,7 @@ module.exports = {
       username,
       accessKey,
       region,
-      tunnelName,
+      tunnel,
       jobName,
       build,
       tags,

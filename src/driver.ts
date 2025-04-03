@@ -21,6 +21,7 @@ export class SauceDriver {
   private readonly username: string;
   private readonly accessKey: string;
   private readonly tunnelName: string;
+  private readonly tunnelOwner?: string;
   private sessions = new Map<string, Client>();
   private readonly build: string;
   private readonly tags?: string[];
@@ -32,7 +33,10 @@ export class SauceDriver {
     username: string,
     accessKey: string,
     region: Region,
-    tunnelName: string,
+    tunnel: {
+      name: string;
+      owner?: string;
+    },
     jobName?: string,
     build?: string,
     tags?: string[],
@@ -40,7 +44,8 @@ export class SauceDriver {
     this.username = username;
     this.accessKey = accessKey;
     this.region = region;
-    this.tunnelName = tunnelName;
+    this.tunnelName = tunnel.name;
+    this.tunnelOwner = tunnel.owner;
     this.jobName = jobName;
     this.build = build ?? Math.random().toString(36).substring(2, 10);
     this.tags = tags;
@@ -73,6 +78,7 @@ export class SauceDriver {
       build: this.build,
       tags: this.tags,
       tunnelName: this.tunnelName,
+      tunnelOwner: this.tunnelOwner,
       screenResolution: screenResolution,
       idleTimeout: 3600, // 1 hour
       enableTestReport: true,

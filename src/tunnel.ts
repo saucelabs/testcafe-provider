@@ -8,7 +8,10 @@ export async function waitForTunnel(
   username: string,
   accessKey: string,
   region: string,
-  tunnelName: string,
+  tunnel: {
+    name: string;
+    owner?: string;
+  },
   wait: number,
 ): Promise<'ok' | 'notready' | 'unauthorized'> {
   return await Promise.race([
@@ -19,7 +22,7 @@ export async function waitForTunnel(
           username,
           accessKey,
           region,
-          filter: tunnelName,
+          filter: tunnel.name,
         });
         if (result.kind === 'unauthorized') {
           return 'unauthorized';
@@ -35,8 +38,8 @@ export async function waitForTunnel(
           if (
             tunnels.some(
               (t) =>
-                t.owner === username &&
-                (t.tunnel_identifier === tunnelName || t.id === tunnelName) &&
+                t.owner === (tunnel.owner || username) &&
+                (t.tunnel_identifier === tunnel.name || t.id === tunnel.name) &&
                 t.status === 'running',
             )
           ) {
