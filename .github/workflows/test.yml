@@ -34,6 +34,7 @@ jobs:
         with:
           username: ${{ secrets.SAUCE_USERNAME }}
           accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+          region: us-west-1
           tunnelName: testcafe-provider
 
       - name: Test
