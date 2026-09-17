@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -30,10 +30,11 @@ jobs:
         run: npm run lint
 
       - name: Start Tunnel
-        uses: saucelabs/sauce-connect-action@v2
+        uses: saucelabs/sauce-connect-action@v3
         with:
           username: ${{ secrets.SAUCE_USERNAME }}
           accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+          region: us-west-1
           tunnelName: testcafe-provider
 
       - name: Test
